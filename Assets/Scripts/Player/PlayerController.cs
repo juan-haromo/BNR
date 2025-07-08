@@ -8,6 +8,7 @@ public class PlayerController : NetworkBehaviour
 {
     [Header("Player References")]
     [SerializeField] Transform player;
+    public Transform Player => player;
     [SerializeField] Transform playerModel;
     [SerializeField] Transform orientation;
     public Rigidbody rb;
@@ -74,6 +75,7 @@ public class PlayerController : NetworkBehaviour
         StateMachine.CurrentState.FixedUpdate();
     }
     #endregion
+    
     #region Mirror Calls
     public override void OnStartLocalPlayer()
     {
@@ -99,7 +101,6 @@ public class PlayerController : NetworkBehaviour
         }
         
     }
-
     public void Move(Vector3 moveDirection)
     {
         if (moveDirection != Vector3.zero)
