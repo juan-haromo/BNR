@@ -23,6 +23,7 @@ public class PlayerController : NetworkBehaviour
     [Header("Collision")]
     public LayerMask groundMask;
 
+    
     public IA_Player Input { get; private set; }
 
     public Vector3 InputDirection { get; private set; }
@@ -32,9 +33,10 @@ public class PlayerController : NetworkBehaviour
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerGroundState GroundState { get; private set; }
     public PlayerAirState AirState { get; private set; }
-    
+
     #endregion
 
+    #region Unity Calls
     private void Start()
     {
         //Input set up
@@ -52,7 +54,6 @@ public class PlayerController : NetworkBehaviour
         AirState = new PlayerAirState(StateMachine, this);
 
         StateMachine.Initialize(AirState);
-
     }
 
     private void OnDestroy()
@@ -63,14 +64,27 @@ public class PlayerController : NetworkBehaviour
 
     private void Update()
     {
+        if (!isLocalPlayer) { return; }
         StateMachine.CurrentState.Update();
     }
 
     private void FixedUpdate()
     {
+        if (!isLocalPlayer) { return;  }
         StateMachine.CurrentState.FixedUpdate();
     }
+    #endregion
+    #region Mirror Calls
+    public override void OnStartLocalPlayer()
+    {
+        base.OnStartLocalPlayer();
+        if (!isLocalPlayer) { return; }
+        gameObject.SetActive(true);
+    }
 
+    #endregion
+
+    #region Movement
     public void UpdateMoveInput()
     {
         
@@ -103,4 +117,5 @@ public class PlayerController : NetworkBehaviour
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
         }
     }
+    #endregion
 }
