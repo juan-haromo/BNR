@@ -267,7 +267,7 @@ MonoBehaviour:
   playerModel: {fileID: 3487824917089515744}
   orientation: {fileID: 7330734260977622739}
   rb: {fileID: 6300846397087913541}
-  playerCollider: {fileID: 6827144892724760246}
+  playerCollider: {fileID: 546827582258028742}
   rotationSpeed: 10
   moveSpeed: 10
   jumpForce: 10
@@ -358,6 +358,7 @@ GameObject:
   - component: {fileID: 5609963256068084037}
   - component: {fileID: 1662778757718919009}
   - component: {fileID: 8078298611311649334}
+  - component: {fileID: 546827582258028742}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -425,7 +426,7 @@ MonoBehaviour:
   syncDirection: 1
   syncMode: 0
   syncInterval: 0
-  target: {fileID: 7728893647508563611}
+  target: {fileID: 3487824917089515744}
   syncPosition: 1
   syncRotation: 1
   syncScale: 0
@@ -495,6 +496,29 @@ MonoBehaviour:
   positionSensitivity: 0.01
   rotationSensitivity: 0.01
   scaleSensitivity: 0.01
+--- !u!136 &546827582258028742
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2876617934937418618}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3512719872369437617
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +616,6 @@ GameObject:
   - component: {fileID: 3487824917089515744}
   - component: {fileID: 6437995727900150384}
   - component: {fileID: 2550273348695572461}
-  - component: {fileID: 6827144892724760246}
   m_Layer: 0
   m_Name: PlayerModel
   m_TagString: Player
@@ -669,26 +692,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &6827144892724760246
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4674625869868532163}
-  m_Material: {fileID: 13400000, guid: d3ad69a261d202146b51f9909f91f3c5, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
