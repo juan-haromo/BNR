@@ -489,7 +489,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  maxHp: 100
+  maxHp: 1
 --- !u!114 &816574713
 MonoBehaviour:
   m_ObjectHideFlags: 0

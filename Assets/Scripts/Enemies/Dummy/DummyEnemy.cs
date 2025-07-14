@@ -5,6 +5,7 @@ using UnityEngine;
 public class DummyEnemy : NetworkBehaviour, IDamagable
 {
     [SerializeField] float maxHp;
+    [SyncVar]
     float currentHP;
     [SyncVar(hook = nameof(AliveChange))]
     bool isAlive = true;
@@ -17,6 +18,13 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
 
     public void DealDamage(float amount, GameObject dealer)
     {
+        CmdDealDamage(amount, dealer);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void CmdDealDamage(float amount, GameObject dealer)
+    {
+
         currentHP -= Mathf.Abs(amount);
         Debug.Log(dealer + " hit " + gameObject + " with " + amount + " damage");
         if (currentHP <= 0)

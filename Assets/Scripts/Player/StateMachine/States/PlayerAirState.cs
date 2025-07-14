@@ -9,13 +9,11 @@ public class PlayerAirState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter air state");
         velocity = 0;
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit air state");
     }
 
     public override void FixedUpdate()

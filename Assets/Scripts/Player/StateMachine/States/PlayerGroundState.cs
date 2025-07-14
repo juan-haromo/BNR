@@ -13,7 +13,6 @@ public class PlayerGroundState : PlayerState
 
     public override void Enter()
     {
-        Debug.Log("Enter ground state");
         controller.drag = 5;
         controller.Input.PlayerMovement.Jump.performed += Jump;
         controller.Input.PlayerMovement.Attack.performed += Attack;
@@ -22,7 +21,6 @@ public class PlayerGroundState : PlayerState
 
     public override void Exit()
     {
-        Debug.Log("Exit ground state");
         controller.Input.PlayerMovement.Jump.performed -= Jump;
         controller.Input.PlayerMovement.Attack.performed -= Attack;
     }
@@ -55,18 +53,18 @@ public class PlayerGroundState : PlayerState
     }
 
     void Attack(InputAction.CallbackContext context)
-    {
-        CommandAttack();
+    {        
+        if (Time.time < nextAttack) { Debug.Log("Attack on cooldown"); return; }
+        nextAttack = Time.time + attackDelay;
+        CommandAttack(controller.Player.position, controller.Player.forward);
     }
 
     [Command]
-    void CommandAttack()
+    void CommandAttack(Vector3 position, Vector3 direction)
     {
-        if (Time.time < nextAttack) { Debug.Log("Attack on cooldown"); return; }
-        nextAttack = Time.time + attackDelay;
 
         Debug.Log("Attack");
-        RaycastHit[] hits = Physics.SphereCastAll(controller.Player.position, 10, controller.Player.forward, 10);
+        RaycastHit[] hits = Physics.SphereCastAll(position, 10,direction , 10);
 
         foreach (RaycastHit hit in hits)
         {
@@ -75,8 +73,15 @@ public class PlayerGroundState : PlayerState
                 if (hit.collider.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
                 {
                     damagable.DealDamage(10, controller.gameObject);
+                    //ServerDamage(damagable);
                 }
             }
         }
+    }
+
+    [Server]
+    private void ServerDamage(IDamagable damagable)
+    {
+        
     }
 }
