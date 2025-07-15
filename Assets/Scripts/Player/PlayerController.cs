@@ -17,13 +17,29 @@ public class PlayerController : NetworkBehaviour
 
     [Header("Movement")]
     [SerializeField] float rotationSpeed;
-    [SerializeField] float moveSpeed;
+    [SerializeField] float walkSpeed;
+    [SerializeField] float runSpeed;
+    float currentSpeed;
     public float jumpForce;
     public float drag;
 
     [Header("Collision")]
     public LayerMask groundMask;
 
+    [Header("Animation")]
+    [SerializeField] Animator animator;
+    private string currentAnimation = string.Empty;
+
+    public bool IsRunning 
+    {  
+        get=>IsRunning;
+        set
+        {
+            currentSpeed = value? runSpeed : walkSpeed;
+            isRunning = value;
+        }
+    }
+    bool isRunning;
     
     public IA_Player Input { get; private set; }
 
@@ -48,6 +64,8 @@ public class PlayerController : NetworkBehaviour
         //Cursor set up
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        currentSpeed = walkSpeed;
 
         //State machine set up
         StateMachine = new PlayerStateMachine(this);
@@ -105,18 +123,23 @@ public class PlayerController : NetworkBehaviour
     {
         if (moveDirection != Vector3.zero)
         {
-            rb.AddForce(moveDirection.normalized * moveSpeed,ForceMode.Force); 
-            Vector3 flatVelocity = new Vector3(rb.linearVelocity.x,0,rb.linearVelocity.z);
-            if(rb.linearVelocity.magnitude > moveSpeed)
-            {
-                Vector3 maxSpeed = new Vector3(flatVelocity.x, rb.linearVelocity.y, flatVelocity.z);
-                rb.linearVelocity = maxSpeed.normalized * moveSpeed;
-            }
+            moveDirection = moveDirection.normalized * currentSpeed;
+            moveDirection.y = rb.linearVelocity.y;
+            rb.linearVelocity = moveDirection;
+            animator.SetFloat("Speed",isRunning? 1 : 0.5f);
         }
         else
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
+            animator.SetFloat("Speed",0);
         }
     }
     #endregion
+
+    public void SetAnimation(string newAnimation)
+    {
+        if(newAnimation == currentAnimation) { return; }
+        currentAnimation = newAnimation;
+        animator.Play(currentAnimation);
+    }
 }

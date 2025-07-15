@@ -16,13 +16,19 @@ public class PlayerGroundState : PlayerState
         controller.drag = 5;
         controller.Input.PlayerMovement.Jump.performed += Jump;
         controller.Input.PlayerMovement.Attack.performed += Attack;
-    }
+        controller.Input.PlayerMovement.Run.started += StartRun;
+        controller.Input.PlayerMovement.Run.canceled += StopRun;
 
+        controller.SetAnimation("GroundBlend");
+    }
 
     public override void Exit()
     {
         controller.Input.PlayerMovement.Jump.performed -= Jump;
         controller.Input.PlayerMovement.Attack.performed -= Attack;
+        controller.Input.PlayerMovement.Run.started -= StartRun;
+        controller.Input.PlayerMovement.Run.canceled -= StopRun;
+        controller.IsRunning = false;
     }
 
     public override void FixedUpdate()
@@ -46,6 +52,17 @@ public class PlayerGroundState : PlayerState
         }
     }
 
+
+    private void StopRun(InputAction.CallbackContext context)
+    {
+       controller.IsRunning = false;
+    }
+
+    private void StartRun(InputAction.CallbackContext context)
+    {
+        controller.IsRunning = true;
+    }
+
     private void Jump(InputAction.CallbackContext context)
     {
         Debug.Log("Jump");
@@ -64,7 +81,7 @@ public class PlayerGroundState : PlayerState
     {
 
         Debug.Log("Attack");
-        RaycastHit[] hits = Physics.SphereCastAll(position, 10,direction , 10);
+        RaycastHit[] hits = Physics.SphereCastAll(position, 1,direction , 10);
 
         foreach (RaycastHit hit in hits)
         {
@@ -73,15 +90,8 @@ public class PlayerGroundState : PlayerState
                 if (hit.collider.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
                 {
                     damagable.DealDamage(10, controller.gameObject);
-                    //ServerDamage(damagable);
                 }
             }
         }
-    }
-
-    [Server]
-    private void ServerDamage(IDamagable damagable)
-    {
-        
     }
 }
