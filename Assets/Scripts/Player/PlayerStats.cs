@@ -10,7 +10,7 @@ using UnityEngine;
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
 */
 
-public class PlayerStats : NetworkBehaviour
+public class PlayerStats : NetworkBehaviour, IDamagable
 {
     [SerializeField] float baseHp = 100;
     float maxHp;
@@ -47,9 +47,17 @@ public class PlayerStats : NetworkBehaviour
         currentDamage += amount; 
     }
 
-    [Command]
+
+    public void DealDamage(float amount, GameObject dealer)
+    {
+        if (dealer == gameObject) { return; }
+        TakeDamage(amount);
+    }
+
+    [Command(requiresAuthority = false)]
     public void TakeDamage(float damage)
     {
+        Debug.Log("Golpeado " + gameObject.name);
         currentHp -= Mathf.Abs(damage);
     }
 
@@ -172,6 +180,7 @@ public class PlayerStats : NetworkBehaviour
     /// <para>When NetworkIdentity.RemoveClientAuthority is called on the server, this will be called on the client that owns the object.</para>
     /// </summary>
     public override void OnStopAuthority() { }
+
 
     #endregion
 }

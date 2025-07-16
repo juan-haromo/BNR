@@ -1,7 +1,7 @@
 using Mirror;
 using UnityEngine;
 
-public class PlayerController : NetworkBehaviour, IDamagable
+public class PlayerController : NetworkBehaviour
 {
     [Header("Player References")]
     [SerializeField] Transform player;
@@ -145,13 +145,5 @@ public class PlayerController : NetworkBehaviour, IDamagable
         if(newAnimation == currentAnimation) { return; }
         currentAnimation = newAnimation;
         animator.Play(currentAnimation);
-    }
-
-    [Command]
-    public void DealDamage(float amount, GameObject dealer)
-    {
-        if (dealer == gameObject) { return; }
-
-        stats.TakeDamage(amount);
     }
 }
