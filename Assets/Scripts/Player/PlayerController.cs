@@ -25,6 +25,7 @@ public class PlayerController : NetworkBehaviour
 
     [Header("Animation")]
     [SerializeField] Animator animator;
+    [SyncVar(hook = nameof(AnimationChanged))]
     private string currentAnimation = string.Empty;
 
     [Header("Stats")]
@@ -130,20 +131,31 @@ public class PlayerController : NetworkBehaviour
             moveDirection = moveDirection.normalized * currentSpeed;
             moveDirection.y = rb.linearVelocity.y;
             rb.linearVelocity = moveDirection;
-            animator.SetFloat("Speed",isRunning? 1 : 0.5f);
+            SetAnimationFloat("Speed",isRunning? 1 : 0.5f);
         }
         else
         {
             rb.linearVelocity = new Vector3(0, rb.linearVelocity.y, 0);
-            animator.SetFloat("Speed",0);
+            SetAnimationFloat("Speed",0);
         }
     }
     #endregion
 
+    [Command]
     public void SetAnimation(string newAnimation)
     {
         if(newAnimation == currentAnimation) { return; }
         currentAnimation = newAnimation;
-        animator.Play(currentAnimation);
+    }
+
+    [Command]
+    public void SetAnimationFloat(string name, float value)
+    {
+        animator.SetFloat(name, value);
+    }
+
+    void AnimationChanged(string oldAnimation, string newAnimation)
+    {
+        animator.Play(newAnimation);
     }
 }

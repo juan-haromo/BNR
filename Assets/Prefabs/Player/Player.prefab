@@ -399,6 +399,7 @@ GameObject:
   - component: {fileID: 8078298611311649334}
   - component: {fileID: 546827582258028742}
   - component: {fileID: 7641542699374960869}
+  - component: {fileID: 2190327029762922009}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -579,6 +580,23 @@ MonoBehaviour:
   baseStamina: 60
   baseDamage: 10
   hpDisplay: {fileID: 5987958734485018346}
+--- !u!114 &2190327029762922009
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2876617934937418618}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f6f3bf89aa97405989c802ba270f815, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  clientAuthority: 0
+  animator: {fileID: 3672232746068534977}
 --- !u!1 &6049187288090811752
 GameObject:
   m_ObjectHideFlags: 0
