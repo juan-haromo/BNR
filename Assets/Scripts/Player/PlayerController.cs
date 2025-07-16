@@ -1,10 +1,7 @@
 using Mirror;
-using System;
-using Unity.Cinemachine;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class PlayerController : NetworkBehaviour
+public class PlayerController : NetworkBehaviour, IDamagable
 {
     [Header("Player References")]
     [SerializeField] Transform player;
@@ -29,6 +26,13 @@ public class PlayerController : NetworkBehaviour
     [Header("Animation")]
     [SerializeField] Animator animator;
     private string currentAnimation = string.Empty;
+
+    [Header("Stats")]
+    [SerializeField] PlayerStats stats;
+
+    [Header("Weapons")]
+    [SerializeField] Weapon weapon;
+
 
     public bool IsRunning 
     {  
@@ -141,5 +145,13 @@ public class PlayerController : NetworkBehaviour
         if(newAnimation == currentAnimation) { return; }
         currentAnimation = newAnimation;
         animator.Play(currentAnimation);
+    }
+
+    [Command]
+    public void DealDamage(float amount, GameObject dealer)
+    {
+        if (dealer == gameObject) { return; }
+
+        stats.TakeDamage(amount);
     }
 }

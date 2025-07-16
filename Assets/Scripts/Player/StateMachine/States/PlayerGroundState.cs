@@ -89,7 +89,7 @@ public class PlayerGroundState : PlayerState
             {
                 if (hit.collider.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
                 {
-                    damagable.DealDamage(10, controller.gameObject);
+                    damagable.DealDamage(10, controller.PlayerCollider.gameObject);
                 }
             }
         }

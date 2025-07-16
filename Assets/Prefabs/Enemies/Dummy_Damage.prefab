@@ -129,6 +129,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   maxHp: 1
+  enemyMesh: {fileID: 2778614689407263905}
+  enemyCollider: {fileID: 6453539120977208445}
+  rb: {fileID: 5499273887517919009}
+  statType: 2
+  statGivenAmount: 0.5
 --- !u!114 &7848843551255784819
 MonoBehaviour:
   m_ObjectHideFlags: 0

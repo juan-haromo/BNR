@@ -337,6 +337,140 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": false
                 }
             ]
+        },
+        {
+            ""name"": ""SpectatorMovement"",
+            ""id"": ""e1429c35-6cc9-42d3-a851-93da7041904b"",
+            ""actions"": [
+                {
+                    ""name"": ""ForwardBack"",
+                    ""type"": ""Value"",
+                    ""id"": ""cf232757-0400-4d60-be05-f800d6a612e5"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""LeftRight"",
+                    ""type"": ""Value"",
+                    ""id"": ""ef33d237-ac75-43e0-830b-4dc7e5e0f0b0"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""UpDown"",
+                    ""type"": ""Value"",
+                    ""id"": ""e49b32c7-5b84-4542-bd29-5b520be3966d"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""bef4cb21-c0aa-43fd-8420-9f277cf231f6"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ForwardBack"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""73e434e5-8f94-4a87-9a02-57ac89adb4ca"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ForwardBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""26200d9c-654d-406c-9f47-4506a397b49d"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""ForwardBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""1f16bc6e-3b79-4e53-81df-e79dbd97fe71"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftRight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""025def35-2725-4612-b9db-0d1ebbd13fdf"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""41f67018-990c-4fb1-bf74-ac20a76afd59"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""LeftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""81071f27-12ae-4688-9d48-b5f0654281b1"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpDown"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""71ad096d-20d9-48ac-9681-fee9339fbe3c"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""8cf56022-c04d-4157-a1fb-5b81c730b79a"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -376,11 +510,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
         m_PlayerMovement_Attack = m_PlayerMovement.FindAction("Attack", throwIfNotFound: true);
         m_PlayerMovement_Run = m_PlayerMovement.FindAction("Run", throwIfNotFound: true);
+        // SpectatorMovement
+        m_SpectatorMovement = asset.FindActionMap("SpectatorMovement", throwIfNotFound: true);
+        m_SpectatorMovement_ForwardBack = m_SpectatorMovement.FindAction("ForwardBack", throwIfNotFound: true);
+        m_SpectatorMovement_LeftRight = m_SpectatorMovement.FindAction("LeftRight", throwIfNotFound: true);
+        m_SpectatorMovement_UpDown = m_SpectatorMovement.FindAction("UpDown", throwIfNotFound: true);
     }
 
     ~@IA_Player()
     {
         UnityEngine.Debug.Assert(!m_PlayerMovement.enabled, "This will cause a leak and performance issues, IA_Player.PlayerMovement.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_SpectatorMovement.enabled, "This will cause a leak and performance issues, IA_Player.SpectatorMovement.Disable() has not been called.");
     }
 
     /// <summary>
@@ -592,6 +732,124 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="PlayerMovementActions" /> instance referencing this action map.
     /// </summary>
     public PlayerMovementActions @PlayerMovement => new PlayerMovementActions(this);
+
+    // SpectatorMovement
+    private readonly InputActionMap m_SpectatorMovement;
+    private List<ISpectatorMovementActions> m_SpectatorMovementActionsCallbackInterfaces = new List<ISpectatorMovementActions>();
+    private readonly InputAction m_SpectatorMovement_ForwardBack;
+    private readonly InputAction m_SpectatorMovement_LeftRight;
+    private readonly InputAction m_SpectatorMovement_UpDown;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "SpectatorMovement".
+    /// </summary>
+    public struct SpectatorMovementActions
+    {
+        private @IA_Player m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public SpectatorMovementActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "SpectatorMovement/ForwardBack".
+        /// </summary>
+        public InputAction @ForwardBack => m_Wrapper.m_SpectatorMovement_ForwardBack;
+        /// <summary>
+        /// Provides access to the underlying input action "SpectatorMovement/LeftRight".
+        /// </summary>
+        public InputAction @LeftRight => m_Wrapper.m_SpectatorMovement_LeftRight;
+        /// <summary>
+        /// Provides access to the underlying input action "SpectatorMovement/UpDown".
+        /// </summary>
+        public InputAction @UpDown => m_Wrapper.m_SpectatorMovement_UpDown;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_SpectatorMovement; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="SpectatorMovementActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(SpectatorMovementActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="SpectatorMovementActions" />
+        public void AddCallbacks(ISpectatorMovementActions instance)
+        {
+            if (instance == null || m_Wrapper.m_SpectatorMovementActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_SpectatorMovementActionsCallbackInterfaces.Add(instance);
+            @ForwardBack.started += instance.OnForwardBack;
+            @ForwardBack.performed += instance.OnForwardBack;
+            @ForwardBack.canceled += instance.OnForwardBack;
+            @LeftRight.started += instance.OnLeftRight;
+            @LeftRight.performed += instance.OnLeftRight;
+            @LeftRight.canceled += instance.OnLeftRight;
+            @UpDown.started += instance.OnUpDown;
+            @UpDown.performed += instance.OnUpDown;
+            @UpDown.canceled += instance.OnUpDown;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="SpectatorMovementActions" />
+        private void UnregisterCallbacks(ISpectatorMovementActions instance)
+        {
+            @ForwardBack.started -= instance.OnForwardBack;
+            @ForwardBack.performed -= instance.OnForwardBack;
+            @ForwardBack.canceled -= instance.OnForwardBack;
+            @LeftRight.started -= instance.OnLeftRight;
+            @LeftRight.performed -= instance.OnLeftRight;
+            @LeftRight.canceled -= instance.OnLeftRight;
+            @UpDown.started -= instance.OnUpDown;
+            @UpDown.performed -= instance.OnUpDown;
+            @UpDown.canceled -= instance.OnUpDown;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="SpectatorMovementActions.UnregisterCallbacks(ISpectatorMovementActions)" />.
+        /// </summary>
+        /// <seealso cref="SpectatorMovementActions.UnregisterCallbacks(ISpectatorMovementActions)" />
+        public void RemoveCallbacks(ISpectatorMovementActions instance)
+        {
+            if (m_Wrapper.m_SpectatorMovementActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="SpectatorMovementActions.AddCallbacks(ISpectatorMovementActions)" />
+        /// <seealso cref="SpectatorMovementActions.RemoveCallbacks(ISpectatorMovementActions)" />
+        /// <seealso cref="SpectatorMovementActions.UnregisterCallbacks(ISpectatorMovementActions)" />
+        public void SetCallbacks(ISpectatorMovementActions instance)
+        {
+            foreach (var item in m_Wrapper.m_SpectatorMovementActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_SpectatorMovementActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="SpectatorMovementActions" /> instance referencing this action map.
+    /// </summary>
+    public SpectatorMovementActions @SpectatorMovement => new SpectatorMovementActions(this);
     private int m_GamepadSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -660,5 +918,34 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnRun(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "SpectatorMovement" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="SpectatorMovementActions.AddCallbacks(ISpectatorMovementActions)" />
+    /// <seealso cref="SpectatorMovementActions.RemoveCallbacks(ISpectatorMovementActions)" />
+    public interface ISpectatorMovementActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "ForwardBack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnForwardBack(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "LeftRight" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftRight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "UpDown" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnUpDown(InputAction.CallbackContext context);
     }
 }

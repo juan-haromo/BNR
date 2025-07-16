@@ -1,5 +1,7 @@
 using Mirror;
+using System;
 using System.Collections;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class DummyEnemy : NetworkBehaviour, IDamagable
@@ -9,11 +11,15 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
     float currentHP;
     [SyncVar(hook = nameof(AliveChange))]
     bool isAlive = true;
+    [SerializeField] MeshRenderer enemyMesh;
+    [SerializeField] Collider enemyCollider;
+    [SerializeField] Rigidbody rb;
+    [SerializeField] StatType statType;
+    [SerializeField] float statGivenAmount;
 
     public override void OnStartServer()
     {
         base.OnStartServer();
-        currentHP = maxHp;
     }
 
     public void DealDamage(float amount, GameObject dealer)
@@ -29,19 +35,28 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
         Debug.Log(dealer + " hit " + gameObject + " with " + amount + " damage");
         if (currentHP <= 0)
         {
-            Die();
+            Die(dealer);
         }
     }
 
-    void Die()
+  
+    void Die(GameObject dealer)
     {
+        
+        if (dealer.TryGetComponent<PlayerStats>(out PlayerStats stats))
+        {
+            stats.IncreaseStat(statType, statGivenAmount);
+        }
+        
         StartCoroutine(Revive());
         isAlive = false;
     }
 
     void AliveChange(bool _oldAlive, bool _newAlive)
     {
-        gameObject.SetActive(_newAlive);
+        rb.useGravity = _newAlive;
+        enemyMesh.enabled = _newAlive;
+        enemyCollider.enabled = _newAlive;
     }
 
     IEnumerator Revive()
@@ -50,4 +65,12 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
         isAlive = true;
         currentHP = maxHp;
     }
+}
+
+[Serializable]
+public enum StatType
+{
+    HP,
+    Stamina,
+    Damage
 }
