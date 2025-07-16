@@ -39,7 +39,7 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
         }
     }
 
-  
+    [Command(requiresAuthority = false)]
     void Die(GameObject dealer)
     {
         
@@ -55,6 +55,7 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
     void AliveChange(bool _oldAlive, bool _newAlive)
     {
         rb.useGravity = _newAlive;
+        rb.linearVelocity = Vector3.zero;
         enemyMesh.enabled = _newAlive;
         enemyCollider.enabled = _newAlive;
     }
