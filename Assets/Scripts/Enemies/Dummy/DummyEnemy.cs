@@ -1,7 +1,6 @@
 using Mirror;
 using System;
 using System.Collections;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
@@ -40,7 +39,7 @@ public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
         }
     }
 
-    [Command(requiresAuthority = false)]
+    [Server]
     void Die(GameObject dealer)
     {
         if (dealer.TryGetComponent<PlayerStats>(out PlayerStats stats))
