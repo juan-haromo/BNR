@@ -15,7 +15,8 @@ public class PlayerGroundState : PlayerState
     {
         controller.drag = 5;
         controller.Input.PlayerMovement.Jump.performed += Jump;
-        controller.Input.PlayerMovement.Attack.performed += Attack;
+        controller.Input.PlayerMovement.Light.performed += LightAttack;
+        controller.Input.PlayerMovement.Heavy.performed += HeavyAttack;
         controller.Input.PlayerMovement.Run.started += StartRun;
         controller.Input.PlayerMovement.Run.canceled += StopRun;
 
@@ -25,10 +26,21 @@ public class PlayerGroundState : PlayerState
     public override void Exit()
     {
         controller.Input.PlayerMovement.Jump.performed -= Jump;
-        controller.Input.PlayerMovement.Attack.performed -= Attack;
+        controller.Input.PlayerMovement.Light.performed += LightAttack;
+        controller.Input.PlayerMovement.Heavy.performed += HeavyAttack;
         controller.Input.PlayerMovement.Run.started -= StartRun;
         controller.Input.PlayerMovement.Run.canceled -= StopRun;
         controller.IsRunning = false;
+    }
+
+    private void HeavyAttack(InputAction.CallbackContext context)
+    {
+        controller.SetAnimation("HeavyAttack");
+    }
+
+    private void LightAttack(InputAction.CallbackContext context)
+    {
+        controller.SetAnimation("LightAttack"); 
     }
 
     public override void FixedUpdate()
@@ -67,31 +79,5 @@ public class PlayerGroundState : PlayerState
     {
         Debug.Log("Jump");
         controller.rb.AddForce(Vector3.up * controller.jumpForce, ForceMode.Impulse);
-    }
-
-    void Attack(InputAction.CallbackContext context)
-    {        
-        if (Time.time < nextAttack) { Debug.Log("Attack on cooldown"); return; }
-        nextAttack = Time.time + attackDelay;
-        CommandAttack(controller.Player.position, controller.Player.forward);
-    }
-
-    [Command]
-    void CommandAttack(Vector3 position, Vector3 direction)
-    {
-
-        Debug.Log("Attack");
-        RaycastHit[] hits = Physics.SphereCastAll(position, 1,direction , 10);
-
-        foreach (RaycastHit hit in hits)
-        {
-            if (hit.collider != controller.PlayerCollider)
-            {
-                if (hit.collider.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
-                {
-                    damagable.DealDamage(10, controller.PlayerCollider.gameObject);
-                }
-            }
-        }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
-public class DummyEnemy : NetworkBehaviour, IDamagable
+public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
 {
     [SerializeField] float maxHp;
     [SyncVar]
@@ -16,6 +16,7 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
     [SerializeField] Rigidbody rb;
     [SerializeField] StatType statType;
     [SerializeField] float statGivenAmount;
+    IEnemyPool pool;
 
     public override void OnStartServer()
     {
@@ -42,14 +43,11 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
     [Command(requiresAuthority = false)]
     void Die(GameObject dealer)
     {
-        
         if (dealer.TryGetComponent<PlayerStats>(out PlayerStats stats))
         {
             stats.IncreaseStat(statType, statGivenAmount);
         }
-        
-        StartCoroutine(Revive());
-        isAlive = false;
+        pool.AddToPool(this);
     }
 
     void AliveChange(bool _oldAlive, bool _newAlive)
@@ -58,13 +56,24 @@ public class DummyEnemy : NetworkBehaviour, IDamagable
         rb.linearVelocity = Vector3.zero;
         enemyMesh.enabled = _newAlive;
         enemyCollider.enabled = _newAlive;
+        if (!_newAlive)
+        {
+            EnterPool();
+        }
     }
 
-    IEnumerator Revive()
+    public void Initialize(IEnemyPool pool)
     {
-        yield return new WaitForSeconds(5.0f);
+       this.pool = pool;
+    }
+
+    public void EnterPool()
+    {
+        isAlive = false;
+    }    
+    public void ExitPool()
+    {
         isAlive = true;
-        currentHP = maxHp;
     }
 }
 

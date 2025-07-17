@@ -523,9 +523,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   enemies:
-  - {fileID: 5641490348612641594, guid: f2fda8a05ba862f4bb2c69a267aa5d44, type: 3}
+  - poolableEnemy: {fileID: 5641490348612641594, guid: f2fda8a05ba862f4bb2c69a267aa5d44, type: 3}
+    amount: 3
   spawnRadius: 5
   spawnDelay: 2
+  maxSpawnEnemies: 2
 --- !u!4 &1002367319
 Transform:
   m_ObjectHideFlags: 0
@@ -777,9 +779,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   enemies:
-  - {fileID: 5641490348612641594, guid: 7b86d273ba92c8148b7d045064e4b1ed, type: 3}
+  - poolableEnemy: {fileID: 5641490348612641594, guid: 7b86d273ba92c8148b7d045064e4b1ed, type: 3}
+    amount: 4
   spawnRadius: 5
   spawnDelay: 2
+  maxSpawnEnemies: 3
 --- !u!1 &1683721951
 GameObject:
   m_ObjectHideFlags: 0
@@ -831,9 +835,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   enemies:
-  - {fileID: 5641490348612641594, guid: b2a784f89b48e1243a2b04f432f81750, type: 3}
+  - poolableEnemy: {fileID: 5641490348612641594, guid: b2a784f89b48e1243a2b04f432f81750, type: 3}
+    amount: 10
   spawnRadius: 5
   spawnDelay: 2
+  maxSpawnEnemies: 1
 --- !u!4 &1683721954
 Transform:
   m_ObjectHideFlags: 0

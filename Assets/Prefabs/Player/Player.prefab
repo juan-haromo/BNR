@@ -277,6 +277,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   animator: {fileID: 3672232746068534977}
+  canChangeAnimation: 1
   stats: {fileID: 7641542699374960869}
   weapon: {fileID: 0}
 --- !u!114 &5778386787065323644
@@ -873,7 +874,7 @@ Animator:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5584965814685644472}
   m_Enabled: 1
-  m_Avatar: {fileID: 0}
+  m_Avatar: {fileID: 9000000, guid: 3d64b7de3ab77d746845971292fbae03, type: 3}
   m_Controller: {fileID: 9100000, guid: a204aec09d28cc44996a4c5539e4d35b, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0

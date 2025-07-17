@@ -33,9 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Attack",
+                    "name": "Light",
                     "type": "Button",
                     "id": "409dcee3-eaad-4958-b3a7-09cb01c553ff",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Heavy",
+                    "type": "Button",
+                    "id": "068686a0-e027-442c-baa4-5670338e3a46",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -213,7 +222,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";MouseKeyboard",
-                    "action": "Attack",
+                    "action": "Light",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -224,7 +233,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Attack",
+                    "action": "Light",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fa28c09b-546a-4d52-8939-4b83c3dedf28",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";MouseKeyboard",
+                    "action": "Heavy",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "784dfd8f-43b3-4379-9dba-833b7f4de92c",
+                    "path": "<Gamepad>/rightTrigger",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Heavy",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

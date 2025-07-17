@@ -119,9 +119,18 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""initialStateCheck"": false
                 },
                 {
-                    ""name"": ""Attack"",
+                    ""name"": ""Light"",
                     ""type"": ""Button"",
                     ""id"": ""409dcee3-eaad-4958-b3a7-09cb01c553ff"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Heavy"",
+                    ""type"": ""Button"",
+                    ""id"": ""068686a0-e027-442c-baa4-5670338e3a46"",
                     ""expectedControlType"": """",
                     ""processors"": """",
                     ""interactions"": """",
@@ -299,7 +308,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";MouseKeyboard"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Light"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -310,7 +319,29 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": "";Gamepad"",
-                    ""action"": ""Attack"",
+                    ""action"": ""Light"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fa28c09b-546a-4d52-8939-4b83c3dedf28"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""Heavy"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""784dfd8f-43b3-4379-9dba-833b7f4de92c"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Heavy"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -508,7 +539,8 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_PlayerMovement_ForwardMove = m_PlayerMovement.FindAction("ForwardMove", throwIfNotFound: true);
         m_PlayerMovement_SideMove = m_PlayerMovement.FindAction("SideMove", throwIfNotFound: true);
         m_PlayerMovement_Jump = m_PlayerMovement.FindAction("Jump", throwIfNotFound: true);
-        m_PlayerMovement_Attack = m_PlayerMovement.FindAction("Attack", throwIfNotFound: true);
+        m_PlayerMovement_Light = m_PlayerMovement.FindAction("Light", throwIfNotFound: true);
+        m_PlayerMovement_Heavy = m_PlayerMovement.FindAction("Heavy", throwIfNotFound: true);
         m_PlayerMovement_Run = m_PlayerMovement.FindAction("Run", throwIfNotFound: true);
         // SpectatorMovement
         m_SpectatorMovement = asset.FindActionMap("SpectatorMovement", throwIfNotFound: true);
@@ -599,7 +631,8 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerMovement_ForwardMove;
     private readonly InputAction m_PlayerMovement_SideMove;
     private readonly InputAction m_PlayerMovement_Jump;
-    private readonly InputAction m_PlayerMovement_Attack;
+    private readonly InputAction m_PlayerMovement_Light;
+    private readonly InputAction m_PlayerMovement_Heavy;
     private readonly InputAction m_PlayerMovement_Run;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerMovement".
@@ -625,9 +658,13 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         /// </summary>
         public InputAction @Jump => m_Wrapper.m_PlayerMovement_Jump;
         /// <summary>
-        /// Provides access to the underlying input action "PlayerMovement/Attack".
+        /// Provides access to the underlying input action "PlayerMovement/Light".
         /// </summary>
-        public InputAction @Attack => m_Wrapper.m_PlayerMovement_Attack;
+        public InputAction @Light => m_Wrapper.m_PlayerMovement_Light;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerMovement/Heavy".
+        /// </summary>
+        public InputAction @Heavy => m_Wrapper.m_PlayerMovement_Heavy;
         /// <summary>
         /// Provides access to the underlying input action "PlayerMovement/Run".
         /// </summary>
@@ -667,9 +704,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Jump.started += instance.OnJump;
             @Jump.performed += instance.OnJump;
             @Jump.canceled += instance.OnJump;
-            @Attack.started += instance.OnAttack;
-            @Attack.performed += instance.OnAttack;
-            @Attack.canceled += instance.OnAttack;
+            @Light.started += instance.OnLight;
+            @Light.performed += instance.OnLight;
+            @Light.canceled += instance.OnLight;
+            @Heavy.started += instance.OnHeavy;
+            @Heavy.performed += instance.OnHeavy;
+            @Heavy.canceled += instance.OnHeavy;
             @Run.started += instance.OnRun;
             @Run.performed += instance.OnRun;
             @Run.canceled += instance.OnRun;
@@ -693,9 +733,12 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
             @Jump.started -= instance.OnJump;
             @Jump.performed -= instance.OnJump;
             @Jump.canceled -= instance.OnJump;
-            @Attack.started -= instance.OnAttack;
-            @Attack.performed -= instance.OnAttack;
-            @Attack.canceled -= instance.OnAttack;
+            @Light.started -= instance.OnLight;
+            @Light.performed -= instance.OnLight;
+            @Light.canceled -= instance.OnLight;
+            @Heavy.started -= instance.OnHeavy;
+            @Heavy.performed -= instance.OnHeavy;
+            @Heavy.canceled -= instance.OnHeavy;
             @Run.started -= instance.OnRun;
             @Run.performed -= instance.OnRun;
             @Run.canceled -= instance.OnRun;
@@ -905,12 +948,19 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnJump(InputAction.CallbackContext context);
         /// <summary>
-        /// Method invoked when associated input action "Attack" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// Method invoked when associated input action "Light" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>
         /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
-        void OnAttack(InputAction.CallbackContext context);
+        void OnLight(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Heavy" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnHeavy(InputAction.CallbackContext context);
         /// <summary>
         /// Method invoked when associated input action "Run" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
         /// </summary>

@@ -11,11 +11,15 @@ using Unity.Mathematics;
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
 */
 
-public class Spawner : NetworkBehaviour
+public class Spawner : NetworkBehaviour, IEnemyPool
 {
-    public List<GameObject> enemies;
+    public List<PoolableEnemy> enemies;
+    List<IPoolableEnemy> poolableEnemies;
     public float spawnRadius = 1;
     public float spawnDelay = 2;
+    [SerializeField] int maxSpawnEnemies = 3;
+    [SyncVar]
+    int spawnCount = 0;
     #region Unity Callbacks
 
     private void OnDrawGizmosSelected()
@@ -50,10 +54,11 @@ public class Spawner : NetworkBehaviour
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer() 
+    public override void OnStartServer()
     {
-        ServerSpawnEnemy();
+        InstantiateEnemies();
     }
+
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -97,29 +102,73 @@ public class Spawner : NetworkBehaviour
     /// <para>When NetworkIdentity.RemoveClientAuthority is called on the server, this will be called on the client that owns the object.</para>
     /// </summary>
     public override void OnStopAuthority() { }
+  #endregion
 
-
-    [Server]
-    void ServerSpawnEnemy()
+    #region EnemySpawn
+    private void InstantiateEnemies()
     {
         if (!isServer) { return; }
-        StartCoroutine(SpawnEnemy());
+        poolableEnemies = new List<IPoolableEnemy>();
+        foreach (PoolableEnemy enemy in enemies)
+        {
+            if (enemy.poolableEnemy.TryGetComponent<IPoolableEnemy>(out IPoolableEnemy poolableEnemy))
+            {
+                GameObject enemyInstance = enemy.poolableEnemy;
+                for (int i = 0; i < enemy.amount; i++)
+                {
+                    ServerInstantiateEnemy(enemyInstance);
+                }
+            }
+        }
+        StartCoroutine(SpawnDelay());
     }
 
-    IEnumerator SpawnEnemy()
+    [Server]
+    void ServerInstantiateEnemy(GameObject enemy)
     {
-        while (true)
+        GameObject instance = Instantiate(enemy, transform.position,enemy.transform.rotation);
+        IPoolableEnemy poolableEnemy = instance.GetComponent<IPoolableEnemy>();
+        poolableEnemies.Add(poolableEnemy);
+        poolableEnemy.EnterPool();
+        NetworkServer.Spawn(instance);
+    }
+
+    [Server]
+    void SpawnEnemy()
+    {
+        if(!isServer || poolableEnemies.Count <= 0) { return; }
+        RemoveFromPool(poolableEnemies[0]);
+    }
+
+    [Server]
+    public void AddToPool(IPoolableEnemy poolableEnemy)
+    {
+        poolableEnemies.Add(poolableEnemy);
+        poolableEnemy.EnterPool();
+        spawnCount--;
+    }
+
+    [Server]
+    public void RemoveFromPool(IPoolableEnemy poolableEnemy)
+    {
+        if(poolableEnemies.Remove(poolableEnemy))
         {
-            yield return new WaitForSeconds(spawnDelay);
-            int i = UnityEngine.Random.Range(0,enemies.Count);
-            float r = UnityEngine.Random.Range(0, spawnRadius);
-            float a = UnityEngine.Random.Range(0, Mathf.PI * 2);
-            float x = r * MathF.Cos(a);
-            float y = r * Mathf.Sin(a);
-            Vector3 offSet = new Vector3(x, 0, y);
-            GameObject instance = Instantiate(enemies[i], transform.position + offSet, enemies[i].transform.rotation);
-            NetworkServer.Spawn(instance);
+            poolableEnemy.ExitPool();
+            spawnCount++;
+        }
+    }
+
+    IEnumerator SpawnDelay()
+    {
+        while (true) 
+        {
+            yield return new WaitForSeconds(5);
+            if ((spawnCount < maxSpawnEnemies) && poolableEnemies.Count > 0) 
+            {
+                SpawnEnemy();
+            }
         }
     }
     #endregion
+
 }

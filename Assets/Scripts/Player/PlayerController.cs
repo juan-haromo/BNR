@@ -27,6 +27,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] Animator animator;
     [SyncVar(hook = nameof(AnimationChanged))]
     private string currentAnimation = string.Empty;
+    public bool canChangeAnimation = true;
 
     [Header("Stats")]
     [SerializeField] PlayerStats stats;
@@ -141,10 +142,15 @@ public class PlayerController : NetworkBehaviour
     }
     #endregion
 
-    [Command]
     public void SetAnimation(string newAnimation)
     {
-        if(newAnimation == currentAnimation) { return; }
+        CMDSetAnimation(newAnimation);
+    }
+
+    [Command]
+     void CMDSetAnimation(string newAnimation)
+    {
+        if(newAnimation == currentAnimation || !canChangeAnimation) { return; }
         currentAnimation = newAnimation;
     }
 
