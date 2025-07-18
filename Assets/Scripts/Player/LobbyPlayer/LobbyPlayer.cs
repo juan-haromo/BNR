@@ -1,7 +1,5 @@
 using UnityEngine;
 using Mirror;
-using UnityEngine.InputSystem;
-using System;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-player
@@ -70,43 +68,13 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// This is a hook that is invoked on all player objects when entering the room.
     /// <para>Note: isLocalPlayer is not guaranteed to be set until OnStartLocalPlayer is called.</para>
     /// </summary>
-    IA_Player input;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] CapsuleCollider coll;
-    [SerializeField] LayerMask groundMask;
-    [SerializeField] float jumpForce;
-    [SerializeField] float speed;
-    [SerializeField] Animator animator;
-    float moveDirection;
-    bool isGrounded = false;
-    
+    /// 
+
+    [SerializeField] LobbyPlayerController roomPlayer;
     public override void OnClientEnterRoom() 
     {
-        input = new IA_Player();
-        input.RoomMovement.Enable();
-        input.RoomMovement.Jump.performed += Jump;
-
-    }
-
-    private void Jump(InputAction.CallbackContext context)
-    {
-        if(!isLocalPlayer) {return;}
-        if (isGrounded)
-        {
-            animator.SetTrigger("Jump");
-            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-        }
-    }
-
-    private void Update()
-    {
-        if(!isLocalPlayer) {return;}
-        Debug.DrawRay(transform.position, Vector3.down * coll.height * 0.5f, Color.magenta);
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, coll.height * 0.5f, groundMask);
-        animator.SetBool("IsGrounded", isGrounded);
-        moveDirection = input.RoomMovement.Run.ReadValue<float>();
-        animator.SetFloat("Speed", moveDirection);
-        rb.linearVelocity = new Vector3(moveDirection * speed, rb.linearVelocity.y, 0);
+        roomPlayer.EnableInput();
+        roomPlayer.gameObject.SetActive(true);
     }
 
     /// <summary>
@@ -114,8 +82,8 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// </summary>
     public override void OnClientExitRoom() 
     {
-        input.RoomMovement.Disable();
-        input.RoomMovement.Jump.performed -= Jump;
+        roomPlayer.gameObject.SetActive(false);
+        roomPlayer.DisableInput();
     }
 
     #endregion

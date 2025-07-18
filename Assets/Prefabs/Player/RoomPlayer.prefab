@@ -9,10 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4121912476295713914}
-  - component: {fileID: 8493175853615397446}
   - component: {fileID: 1757471931776326356}
-  - component: {fileID: 3052919807573176635}
-  - component: {fileID: 3296962077685503527}
+  - component: {fileID: -4306008315080011225}
+  - component: {fileID: 6146239838612360503}
+  - component: {fileID: 3041353454145217018}
+  - component: {fileID: 7123026530399334085}
   m_Layer: 0
   m_Name: RoomPlayer
   m_TagString: Untagged
@@ -36,29 +37,6 @@ Transform:
   - {fileID: 6356551079642215312}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!136 &8493175853615397446
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8155872960332511190}
-  m_Material: {fileID: 13400000, guid: d3ad69a261d202146b51f9909f91f3c5, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &1757471931776326356
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -76,7 +54,60 @@ MonoBehaviour:
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
---- !u!54 &3052919807573176635
+--- !u!114 &-4306008315080011225
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8155872960332511190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a553cb17010b2403e8523b558bffbc14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 1
+  syncMode: 0
+  syncInterval: 0
+  target: {fileID: 4121912476295713914}
+  syncPosition: 1
+  syncRotation: 1
+  syncScale: 0
+  onlySyncOnChange: 1
+  compressRotation: 1
+  interpolatePosition: 1
+  interpolateRotation: 1
+  interpolateScale: 1
+  coordinateSpace: 0
+  timelineOffset: 1
+  showGizmos: 0
+  showOverlay: 0
+  overlayColor: {r: 0, g: 0, b: 0, a: 0.5}
+  bufferResetMultiplier: 3
+  useFixedUpdate: 0
+  positionSensitivity: 0.01
+  rotationSensitivity: 0.01
+  scaleSensitivity: 0.01
+--- !u!114 &6146239838612360503
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8155872960332511190}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5c8b80c49b913ea45acdd1870399b730, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  showRoomGUI: 1
+  readyToBegin: 0
+  index: 0
+  roomPlayer: {fileID: 3410947061359475860}
+--- !u!54 &3041353454145217018
 Rigidbody:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -98,37 +129,34 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 120
   m_CollisionDetection: 0
---- !u!114 &3296962077685503527
-MonoBehaviour:
+--- !u!136 &7123026530399334085
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8155872960332511190}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b5dac7a390a00fe43aa2bdb8103ff0d6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncDirection: 0
-  syncMode: 0
-  syncInterval: 0
-  showRoomGUI: 1
-  readyToBegin: 0
-  index: 0
-  rb: {fileID: 3052919807573176635}
-  coll: {fileID: 8493175853615397446}
-  groundMask:
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 8
-  jumpForce: 5
-  speed: 2.5
-  animator: {fileID: 1069373274515761642}
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 0
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1001 &6898873588956157051
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -143,7 +171,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.9
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
       propertyPath: m_LocalPosition.z
@@ -188,13 +216,45 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3410947061359475860}
   m_SourcePrefab: {fileID: 100100000, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
 --- !u!95 &1069373274515761642 stripped
 Animator:
   m_CorrespondingSourceObject: {fileID: 5866666021909216657, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
   m_PrefabInstance: {fileID: 6898873588956157051}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &6015913188363823402 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
+  m_PrefabInstance: {fileID: 6898873588956157051}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3410947061359475860
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6015913188363823402}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5dac7a390a00fe43aa2bdb8103ff0d6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncDirection: 0
+  syncMode: 0
+  syncInterval: 0
+  rb: {fileID: 3041353454145217018}
+  coll: {fileID: 7123026530399334085}
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  jumpForce: 5
+  speed: 2.5
+  animator: {fileID: 1069373274515761642}
+  player: {fileID: 8155872960332511190}
 --- !u!4 &6356551079642215312 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -8679921383154817045, guid: a0e17bc06709f8c43a147f90cfac8c50, type: 3}
