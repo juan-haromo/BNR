@@ -419,7 +419,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/s"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";MouseKeyboard"",
                     ""action"": ""ForwardBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -430,7 +430,40 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/w"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""ForwardBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""b598e0ef-1a89-49aa-a172-1e78e1548d1b"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""ForwardBack"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""fa65405b-91ef-42c1-97c4-378fd8d0ddae"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""ForwardBack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3733ffbf-1f54-4493-b809-effe004bb4f0"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""ForwardBack"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -452,7 +485,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/a"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";MouseKeyboard"",
                     ""action"": ""LeftRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -463,7 +496,40 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/d"",
                     ""interactions"": """",
                     ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""LeftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""ef6e9680-aae3-4408-b97b-efdc11d0bc96"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
                     ""groups"": """",
+                    ""action"": ""LeftRight"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""a05793cc-12c5-4dfe-aecf-355618f6f0c7"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""LeftRight"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""8f1d4d3b-6b78-4c72-97e2-5f2a1f3ac24c"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
                     ""action"": ""LeftRight"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -485,7 +551,7 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/q"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";MouseKeyboard"",
                     ""action"": ""UpDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
@@ -496,10 +562,157 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
                     ""path"": ""<Keyboard>/e"",
                     ""interactions"": """",
                     ""processors"": """",
-                    ""groups"": """",
+                    ""groups"": "";MouseKeyboard"",
                     ""action"": ""UpDown"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""c0514ff5-57a3-47ec-96f1-d59ce89ef718"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""UpDown"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""40d61f1b-af6d-46f1-be2d-67eec61b7384"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""UpDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""62e25a67-d2b4-4d83-a938-cd0981cf0c61"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""UpDown"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                }
+            ]
+        },
+        {
+            ""name"": ""RoomMovement"",
+            ""id"": ""8f3a5769-e485-4600-9190-1cb8df09f7e2"",
+            ""actions"": [
+                {
+                    ""name"": ""Run"",
+                    ""type"": ""Value"",
+                    ""id"": ""b7f4f142-4adb-429d-96b1-063eb15a7175"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""d16c1420-20e5-4bdb-a05b-7c2299cf46c6"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""d89eda83-a410-461d-91dc-ba256eae341d"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""2794fa35-219c-497b-a9bf-d76ced1ef989"",
+                    ""path"": ""<Keyboard>/a"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""342c2dcf-3b5c-41ae-b731-5cab6bdd0d94"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""1D Axis"",
+                    ""id"": ""0f789ab9-eeb4-4902-b18e-7dd1350d5e42"",
+                    ""path"": ""1DAxis"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Run"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""negative"",
+                    ""id"": ""fe5556e5-3830-4c26-a38d-76e02724220d"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""positive"",
+                    ""id"": ""3917477d-291d-4091-ac5d-97d1dfd10a7e"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Run"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""295fad81-cf07-43b5-afca-477578def239"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";MouseKeyboard"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""f4b2f774-1a28-4599-aed6-9bf9aac2c174"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Gamepad"",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -547,12 +760,17 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         m_SpectatorMovement_ForwardBack = m_SpectatorMovement.FindAction("ForwardBack", throwIfNotFound: true);
         m_SpectatorMovement_LeftRight = m_SpectatorMovement.FindAction("LeftRight", throwIfNotFound: true);
         m_SpectatorMovement_UpDown = m_SpectatorMovement.FindAction("UpDown", throwIfNotFound: true);
+        // RoomMovement
+        m_RoomMovement = asset.FindActionMap("RoomMovement", throwIfNotFound: true);
+        m_RoomMovement_Run = m_RoomMovement.FindAction("Run", throwIfNotFound: true);
+        m_RoomMovement_Jump = m_RoomMovement.FindAction("Jump", throwIfNotFound: true);
     }
 
     ~@IA_Player()
     {
         UnityEngine.Debug.Assert(!m_PlayerMovement.enabled, "This will cause a leak and performance issues, IA_Player.PlayerMovement.Disable() has not been called.");
         UnityEngine.Debug.Assert(!m_SpectatorMovement.enabled, "This will cause a leak and performance issues, IA_Player.SpectatorMovement.Disable() has not been called.");
+        UnityEngine.Debug.Assert(!m_RoomMovement.enabled, "This will cause a leak and performance issues, IA_Player.RoomMovement.Disable() has not been called.");
     }
 
     /// <summary>
@@ -893,6 +1111,113 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
     /// Provides a new <see cref="SpectatorMovementActions" /> instance referencing this action map.
     /// </summary>
     public SpectatorMovementActions @SpectatorMovement => new SpectatorMovementActions(this);
+
+    // RoomMovement
+    private readonly InputActionMap m_RoomMovement;
+    private List<IRoomMovementActions> m_RoomMovementActionsCallbackInterfaces = new List<IRoomMovementActions>();
+    private readonly InputAction m_RoomMovement_Run;
+    private readonly InputAction m_RoomMovement_Jump;
+    /// <summary>
+    /// Provides access to input actions defined in input action map "RoomMovement".
+    /// </summary>
+    public struct RoomMovementActions
+    {
+        private @IA_Player m_Wrapper;
+
+        /// <summary>
+        /// Construct a new instance of the input action map wrapper class.
+        /// </summary>
+        public RoomMovementActions(@IA_Player wrapper) { m_Wrapper = wrapper; }
+        /// <summary>
+        /// Provides access to the underlying input action "RoomMovement/Run".
+        /// </summary>
+        public InputAction @Run => m_Wrapper.m_RoomMovement_Run;
+        /// <summary>
+        /// Provides access to the underlying input action "RoomMovement/Jump".
+        /// </summary>
+        public InputAction @Jump => m_Wrapper.m_RoomMovement_Jump;
+        /// <summary>
+        /// Provides access to the underlying input action map instance.
+        /// </summary>
+        public InputActionMap Get() { return m_Wrapper.m_RoomMovement; }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Enable()" />
+        public void Enable() { Get().Enable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.Disable()" />
+        public void Disable() { Get().Disable(); }
+        /// <inheritdoc cref="UnityEngine.InputSystem.InputActionMap.enabled" />
+        public bool enabled => Get().enabled;
+        /// <summary>
+        /// Implicitly converts an <see ref="RoomMovementActions" /> to an <see ref="InputActionMap" /> instance.
+        /// </summary>
+        public static implicit operator InputActionMap(RoomMovementActions set) { return set.Get(); }
+        /// <summary>
+        /// Adds <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <param name="instance">Callback instance.</param>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c> or <paramref name="instance"/> have already been added this method does nothing.
+        /// </remarks>
+        /// <seealso cref="RoomMovementActions" />
+        public void AddCallbacks(IRoomMovementActions instance)
+        {
+            if (instance == null || m_Wrapper.m_RoomMovementActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_RoomMovementActionsCallbackInterfaces.Add(instance);
+            @Run.started += instance.OnRun;
+            @Run.performed += instance.OnRun;
+            @Run.canceled += instance.OnRun;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+        }
+
+        /// <summary>
+        /// Removes <see cref="InputAction.started"/>, <see cref="InputAction.performed"/> and <see cref="InputAction.canceled"/> callbacks provided via <param cref="instance" /> on all input actions contained in this map.
+        /// </summary>
+        /// <remarks>
+        /// Calling this method when <paramref name="instance" /> have not previously been registered has no side-effects.
+        /// </remarks>
+        /// <seealso cref="RoomMovementActions" />
+        private void UnregisterCallbacks(IRoomMovementActions instance)
+        {
+            @Run.started -= instance.OnRun;
+            @Run.performed -= instance.OnRun;
+            @Run.canceled -= instance.OnRun;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+        }
+
+        /// <summary>
+        /// Unregisters <param cref="instance" /> and unregisters all input action callbacks via <see cref="RoomMovementActions.UnregisterCallbacks(IRoomMovementActions)" />.
+        /// </summary>
+        /// <seealso cref="RoomMovementActions.UnregisterCallbacks(IRoomMovementActions)" />
+        public void RemoveCallbacks(IRoomMovementActions instance)
+        {
+            if (m_Wrapper.m_RoomMovementActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        /// <summary>
+        /// Replaces all existing callback instances and previously registered input action callbacks associated with them with callbacks provided via <param cref="instance" />.
+        /// </summary>
+        /// <remarks>
+        /// If <paramref name="instance" /> is <c>null</c>, calling this method will only unregister all existing callbacks but not register any new callbacks.
+        /// </remarks>
+        /// <seealso cref="RoomMovementActions.AddCallbacks(IRoomMovementActions)" />
+        /// <seealso cref="RoomMovementActions.RemoveCallbacks(IRoomMovementActions)" />
+        /// <seealso cref="RoomMovementActions.UnregisterCallbacks(IRoomMovementActions)" />
+        public void SetCallbacks(IRoomMovementActions instance)
+        {
+            foreach (var item in m_Wrapper.m_RoomMovementActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_RoomMovementActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    /// <summary>
+    /// Provides a new <see cref="RoomMovementActions" /> instance referencing this action map.
+    /// </summary>
+    public RoomMovementActions @RoomMovement => new RoomMovementActions(this);
     private int m_GamepadSchemeIndex = -1;
     /// <summary>
     /// Provides access to the input control scheme.
@@ -997,5 +1322,27 @@ public partial class @IA_Player: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnUpDown(InputAction.CallbackContext context);
+    }
+    /// <summary>
+    /// Interface to implement callback methods for all input action callbacks associated with input actions defined by "RoomMovement" which allows adding and removing callbacks.
+    /// </summary>
+    /// <seealso cref="RoomMovementActions.AddCallbacks(IRoomMovementActions)" />
+    /// <seealso cref="RoomMovementActions.RemoveCallbacks(IRoomMovementActions)" />
+    public interface IRoomMovementActions
+    {
+        /// <summary>
+        /// Method invoked when associated input action "Run" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRun(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "Jump" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnJump(InputAction.CallbackContext context);
     }
 }
