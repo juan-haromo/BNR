@@ -86,11 +86,11 @@ public class PlayerStats : NetworkBehaviour, IDamagable
 
     public void DealDamage(float amount, GameObject dealer)
     {
-        if (dealer == gameObject || !isServer) { return; }
+        if (dealer == gameObject) { return; }
         TakeDamage(amount);
     }
 
-    [Server]
+    [Command(requiresAuthority = false)]
     public void TakeDamage(float damage)
     {
         Debug.Log("Golpeado " + gameObject.name);

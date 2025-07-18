@@ -37,7 +37,7 @@ public class PlayerController : NetworkBehaviour
     [Header("Weapons")]
     [SerializeField] Weapon weapon;
 
-    [SerializeField] LayerMask playerMask;
+    public LayerMask playerMask;
 
 
     public bool IsRunning 
@@ -155,27 +155,17 @@ public class PlayerController : NetworkBehaviour
 
     public void HeavyAttack()
     {
-        if (!isServer) return;
-        CommandHeavyAttack();
-        SetAnimation("HeavyAttack");
+        CommandHeavyAttack(transform.position);
     }
+
     [Command]
-    void CommandHeavyAttack()
+    void CommandHeavyAttack(Vector3 startPoint)
     {
-        Collider[] hits = Physics.OverlapSphere(transform.position, 3, playerMask);
-        foreach (Collider hit in hits)
-        {
-            if (hit.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
-            {
-                Debug.Log(hit.gameObject.name);
-                damagable.DealDamage(5, gameObject);
-            }
-        }
+
     }
 
     public void SetAnimation(string newAnimation)
     {
-        if (!isServer){return;}   
         CMDSetAnimation(newAnimation);
     }
 

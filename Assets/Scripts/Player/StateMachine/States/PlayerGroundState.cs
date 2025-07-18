@@ -35,7 +35,18 @@ public class PlayerGroundState : PlayerState
 
     private void HeavyAttack(InputAction.CallbackContext context)
     {
-
+        controller.SetAnimation("HeavyAttack");
+        Debug.DrawRay(controller.transform.position, Vector3.forward * 3, Color.yellow);
+        Collider[] hits = Physics.OverlapSphere(controller.transform.position, 10, controller.playerMask);
+        Debug.Log("hits " + hits.Length);
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                Debug.Log(hit.gameObject.name);
+                damagable.DealDamage(5, controller.Stats.gameObject);
+            }
+        }
     }
 
     private void LightAttack(InputAction.CallbackContext context)
