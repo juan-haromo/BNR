@@ -1,6 +1,7 @@
 using Mirror;
 using System.Collections.Generic;
 using TMPro;
+using Unity.Cinemachine;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
@@ -14,7 +15,7 @@ public class PlayerStats : NetworkBehaviour, IDamagable
 {
     [SerializeField] float baseHp = 100;
     float maxHp;
-    [SyncVar(hook =nameof(HpChange))]
+    [SyncVar(hook = nameof(HpChange))]
     float currentHp;
 
     [SerializeField] float baseStamina = 60;
@@ -26,6 +27,41 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     float currentDamage;
 
     [SerializeField] TextMeshPro hpDisplay;
+    [SerializeField] PlayerController controller;
+    [SerializeField] Collider playerCollider;
+    [SerializeField] GameObject playerModel;
+    [SerializeField] CinemachineDeoccluder deoccluder;
+
+    [SyncVar(hook = nameof(ExpectatingChange))]
+    public bool isExpactating;
+
+    public void SetExpectating(bool expectating)
+    {
+        ServerSetExpectating(expectating);
+    }
+    [Server]
+    void ServerSetExpectating(bool expectating)
+    {
+        isExpactating = expectating;
+    }
+
+    void ExpectatingChange(bool oldeExpectating, bool newExpectating)
+    {
+        if (newExpectating) 
+        {
+            controller.Input.PlayerMovement.Disable();
+            controller.Input.SpectatorMovement.Enable();
+        }
+        else
+        {
+            controller.Input.PlayerMovement.Enable();
+            controller.Input.SpectatorMovement.Disable();
+        }
+        controller.rb.useGravity = !newExpectating;
+        controller.Stats.playerCollider.enabled = !newExpectating;
+        controller.Stats.playerModel.SetActive(!newExpectating);
+        controller.Stats.deoccluder.enabled = !newExpectating;
+    }
 
     [Command]
     public void IncreaseMaxHp(float amount)
@@ -50,23 +86,30 @@ public class PlayerStats : NetworkBehaviour, IDamagable
 
     public void DealDamage(float amount, GameObject dealer)
     {
-        if (dealer == gameObject) { return; }
+        if (dealer == gameObject || !isServer) { return; }
         TakeDamage(amount);
     }
 
-    [Command(requiresAuthority = false)]
+    [Server]
     public void TakeDamage(float damage)
     {
         Debug.Log("Golpeado " + gameObject.name);
         currentHp -= Mathf.Abs(damage);
+        if (currentHp <= 0)
+        {
+            RPCEnterSpectator();
+        }
+    }
+
+    [ClientRpc]
+    void RPCEnterSpectator()
+    {
+        controller.StateMachine.ChangeState(controller.SpectatorState);
     }
 
     void HpChange(float oldHp, float newHP)
     {
         hpDisplay.text = currentHp.ToString();
-        if(currentHp <= 0)
-        {
-        }
     }
 
     public void IncreaseStat(StatType statType, float statGivenAmount)

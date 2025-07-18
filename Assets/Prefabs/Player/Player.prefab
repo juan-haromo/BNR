@@ -22,7 +22,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &3112216799013748419
 Transform:
   m_ObjectHideFlags: 0
@@ -31,8 +31,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1290441815795611982}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.25340134, y: 0.00000002108765, z: -0.000000005523933, w: 0.9673613}
-  m_LocalPosition: {x: 0, y: 2.2500005, z: -4}
+  m_LocalRotation: {x: 0.20985533, y: -1.9704729e-15, z: 1.8065842e-16, w: 0.9777325}
+  m_LocalPosition: {x: 0, y: 2.2500005, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -104,14 +104,14 @@ MonoBehaviour:
   Radius: 10
   Orbits:
     Top:
-      Radius: 2
+      Radius: 3
       Height: 5
     Center:
-      Radius: 4
+      Radius: 5
       Height: 2.25
     Bottom:
       Radius: 3
-      Height: 1
+      Height: 0.25
     SplineCurvature: 0.5
   RecenteringTarget: 2
   HorizontalAxis:
@@ -271,6 +271,7 @@ MonoBehaviour:
   rotationSpeed: 10
   walkSpeed: 3
   runSpeed: 10
+  spectatorSpeed: 7
   jumpForce: 7.5
   drag: 2
   groundMask:
@@ -280,6 +281,9 @@ MonoBehaviour:
   canChangeAnimation: 1
   stats: {fileID: 7641542699374960869}
   weapon: {fileID: 0}
+  playerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!114 &5778386787065323644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -577,10 +581,15 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  baseHp: 100
+  baseHp: 10
   baseStamina: 60
   baseDamage: 10
   hpDisplay: {fileID: 5987958734485018346}
+  controller: {fileID: 525445477149433943}
+  playerCollider: {fileID: 546827582258028742}
+  playerModel: {fileID: 5584965814685644472}
+  deoccluder: {fileID: 5778386787065323644}
+  isExpactating: 0
 --- !u!114 &2190327029762922009
 MonoBehaviour:
   m_ObjectHideFlags: 0

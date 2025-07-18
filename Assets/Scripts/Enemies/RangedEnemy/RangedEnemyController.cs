@@ -36,7 +36,6 @@ public class RangedEnemyController : EnemyController
     void Update()
     {
         if (!isServer) { return; }
-        Debug.Log("updating");
         StateMachine.CurrentState.Update();
     }
 
@@ -65,6 +64,7 @@ public class RangedEnemyController : EnemyController
         ServerSetDestination(newDestination);
     }
 
+    [Server]
     void ServerSetDestination(Vector3 newDestination)
     {
         destination = newDestination;
@@ -82,6 +82,7 @@ public class RangedEnemyController : EnemyController
         ServerSetLookDirection(newLookDirection);
     }
 
+    [Server]
     public void ServerSetLookDirection(Vector3 newLookDirection)
     {
         lookDirection = newLookDirection;
@@ -120,6 +121,7 @@ public class RangedEnemyController : EnemyController
         ServerShoot(direction);
     }
 
+    [Server]
     void ServerShoot(Vector3 direction)
     {
         GameObject bulletInstance = Instantiate(projectile.gameObject, projectileStart.position, projectile.transform.rotation);
@@ -132,6 +134,7 @@ public class RangedEnemyController : EnemyController
         return ServerCheckForPlayer();
     }
 
+    [Server]
     Collider[] ServerCheckForPlayer()
     {
         return Physics.OverlapSphere(transform.position, detectionRange, playerMask);
@@ -142,6 +145,7 @@ public class RangedEnemyController : EnemyController
         
         return ServerGetDistance();
     }
+
     [Server]
     public float ServerGetDistance()
     {

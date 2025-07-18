@@ -16,6 +16,7 @@ public class PlayerController : NetworkBehaviour
     [SerializeField] float rotationSpeed;
     [SerializeField] float walkSpeed;
     [SerializeField] float runSpeed;
+    public float spectatorSpeed;
     float currentSpeed;
     public float jumpForce;
     public float drag;
@@ -31,9 +32,12 @@ public class PlayerController : NetworkBehaviour
 
     [Header("Stats")]
     [SerializeField] PlayerStats stats;
+    public PlayerStats Stats => stats;
 
     [Header("Weapons")]
     [SerializeField] Weapon weapon;
+
+    [SerializeField] LayerMask playerMask;
 
 
     public bool IsRunning 
@@ -56,6 +60,7 @@ public class PlayerController : NetworkBehaviour
     public PlayerStateMachine StateMachine { get; private set; }
     public PlayerGroundState GroundState { get; private set; }
     public PlayerAirState AirState { get; private set; }
+    public PlayerSpectatorState SpectatorState { get; private set; }
 
     #endregion
 
@@ -77,8 +82,13 @@ public class PlayerController : NetworkBehaviour
         StateMachine = new PlayerStateMachine(this);
         GroundState = new PlayerGroundState(StateMachine, this);
         AirState = new PlayerAirState(StateMachine, this);
+        SpectatorState = new PlayerSpectatorState(StateMachine, this);
 
         StateMachine.Initialize(AirState);
+        if (!isLocalPlayer) 
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     private void OnDestroy()
@@ -142,8 +152,30 @@ public class PlayerController : NetworkBehaviour
     }
     #endregion
 
+
+    public void HeavyAttack()
+    {
+        if (!isServer) return;
+        CommandHeavyAttack();
+        SetAnimation("HeavyAttack");
+    }
+    [Command]
+    void CommandHeavyAttack()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, 3, playerMask);
+        foreach (Collider hit in hits)
+        {
+            if (hit.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
+            {
+                Debug.Log(hit.gameObject.name);
+                damagable.DealDamage(5, gameObject);
+            }
+        }
+    }
+
     public void SetAnimation(string newAnimation)
     {
+        if (!isServer){return;}   
         CMDSetAnimation(newAnimation);
     }
 

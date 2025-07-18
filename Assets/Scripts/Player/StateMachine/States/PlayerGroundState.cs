@@ -35,7 +35,7 @@ public class PlayerGroundState : PlayerState
 
     private void HeavyAttack(InputAction.CallbackContext context)
     {
-        controller.SetAnimation("HeavyAttack");
+
     }
 
     private void LightAttack(InputAction.CallbackContext context)
