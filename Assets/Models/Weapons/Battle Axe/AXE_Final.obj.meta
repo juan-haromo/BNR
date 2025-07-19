@@ -3,7 +3,17 @@ guid: bdefa70bc899fd94885af6ff2aab637b
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Axe_bladeMat
+    second: {fileID: 2100000, guid: c28044dbc09abb245ac98f90123fb411, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: handleMat
+    second: {fileID: 2100000, guid: 0cda626be970c3643b1abfdeaa81d12d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0

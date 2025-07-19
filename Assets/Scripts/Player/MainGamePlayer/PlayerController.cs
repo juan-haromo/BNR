@@ -26,16 +26,18 @@ public class PlayerController : NetworkBehaviour
 
     [Header("Animation")]
     [SerializeField] Animator animator;
+    public Animator Animator => animator;
     [SyncVar(hook = nameof(AnimationChanged))]
     private string currentAnimation = string.Empty;
-    public bool canChangeAnimation = true;
+    [SyncVar]
+    bool canChangeAnimation = true;
 
     [Header("Stats")]
     [SerializeField] PlayerStats stats;
     public PlayerStats Stats => stats;
 
     [Header("Weapons")]
-    [SerializeField] Weapon weapon;
+    public NetworkWeapon weapon;
 
     public LayerMask playerMask;
 
@@ -62,6 +64,8 @@ public class PlayerController : NetworkBehaviour
     public PlayerAirState AirState { get; private set; }
     public PlayerSpectatorState SpectatorState { get; private set; }
 
+    public PlayerAttackState AttackState { get; private set; }
+
     #endregion
 
     #region Unity Calls
@@ -83,6 +87,7 @@ public class PlayerController : NetworkBehaviour
         GroundState = new PlayerGroundState(StateMachine, this);
         AirState = new PlayerAirState(StateMachine, this);
         SpectatorState = new PlayerSpectatorState(StateMachine, this);
+        AttackState = new PlayerAttackState(StateMachine, this);
 
         StateMachine.Initialize(AirState);
         if (!isLocalPlayer) 
@@ -150,30 +155,29 @@ public class PlayerController : NetworkBehaviour
             SetAnimationFloat("Speed",0);
         }
     }
+
+    public void SetCanChangeAnimation(bool canChange)
+    {
+        CmdCanChangeAnimation(canChange);
+    }
+
+    [Command]
+    void CmdCanChangeAnimation(bool canChange)
+    {
+        canChangeAnimation = canChange;
+    }
     #endregion
-
-
-    public void HeavyAttack()
+    public void SetAnimation(string newAnimation, bool persistentAnimation)
     {
-        CommandHeavyAttack(transform.position);
+        CMDSetAnimation(newAnimation, persistentAnimation);
     }
 
     [Command]
-    void CommandHeavyAttack(Vector3 startPoint)
-    {
-
-    }
-
-    public void SetAnimation(string newAnimation)
-    {
-        CMDSetAnimation(newAnimation);
-    }
-
-    [Command]
-     void CMDSetAnimation(string newAnimation)
+     void CMDSetAnimation(string newAnimation, bool persistentAnimation)
     {
         if(newAnimation == currentAnimation || !canChangeAnimation) { return; }
         currentAnimation = newAnimation;
+        canChangeAnimation = persistentAnimation;
     }
 
     [Command]
@@ -184,6 +188,37 @@ public class PlayerController : NetworkBehaviour
 
     void AnimationChanged(string oldAnimation, string newAnimation)
     {
-        animator.Play(newAnimation);
+        animator.CrossFade(newAnimation,0.2f);
+    }
+
+    [SyncVar]
+    bool heavyAttack;
+
+    public void SetAttackType(bool isHeavy)
+    {
+        CmdSetAttackType(isHeavy);
+    }
+
+    [Command]
+    void CmdSetAttackType(bool isHeavy)
+    {
+        heavyAttack = isHeavy;
+    }
+
+
+    public float GetAttackDuration()
+    {
+        string animationName = heavyAttack ? "HeavyAttack" : "LightAttack";
+        Debug.Log("Attack type " +  animationName);
+        RuntimeAnimatorController runtimeAnimator = animator.runtimeAnimatorController;
+        foreach(AnimationClip clip in runtimeAnimator.animationClips)
+        {
+            if(clip.name == animationName)
+            {
+                return clip.length;
+            }
+        }
+
+        return 0f;
     }
 }

@@ -10,7 +10,6 @@ public class PlayerAirState : PlayerState
     public override void Enter()
     {
         velocity = 0;
-        controller.SetAnimation("Jump");
     }
 
     public override void Exit()

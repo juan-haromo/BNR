@@ -872,6 +872,9 @@ MonoBehaviour:
   - {fileID: 5641490348612641594, guid: f2fda8a05ba862f4bb2c69a267aa5d44, type: 3}
   - {fileID: 5641490348612641594, guid: b2a784f89b48e1243a2b04f432f81750, type: 3}
   - {fileID: 6294104114428062407, guid: 4cdd8e76272cd1049aa7fefd804e5ab8, type: 3}
+  - {fileID: 7779175519405996664, guid: f0d7400a3402dc0499a5a93ab751e1cf, type: 3}
+  - {fileID: 2495429866843656059, guid: fdd71e3f4163e3042a7d39903c0f34f5, type: 3}
+  - {fileID: 6648646594969638619, guid: 929f50dcd9da62f46ab797235e0b2679, type: 3}
   exceptionsDisconnect: 1
   snapshotSettings:
     bufferTimeMultiplier: 2
@@ -888,7 +891,7 @@ MonoBehaviour:
   evaluationInterval: 3
   timeInterpolationGui: 0
   showRoomGUI: 1
-  minPlayers: 2
+  minPlayers: 1
   roomPlayerPrefab: {fileID: 6146239838612360503, guid: 6319ce804cc4b684a974ba7dbe13f232, type: 3}
   RoomScene: Assets/Scenes/Lobby.unity
   GameplayScene: Assets/Scenes/Level.unity

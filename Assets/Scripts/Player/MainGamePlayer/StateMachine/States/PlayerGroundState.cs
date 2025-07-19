@@ -5,8 +5,6 @@ using UnityEngine.InputSystem;
 
 public class PlayerGroundState : PlayerState
 {
-    float nextAttack = 0;
-    float attackDelay = 1.0f;
     public PlayerGroundState(PlayerStateMachine stateMachine, PlayerController controller) : base(stateMachine, controller)
     {
     }
@@ -20,14 +18,14 @@ public class PlayerGroundState : PlayerState
         controller.Input.PlayerMovement.Run.started += StartRun;
         controller.Input.PlayerMovement.Run.canceled += StopRun;
 
-        controller.SetAnimation("GroundBlend");
+        controller.SetAnimation("GroundBlend",true);
     }
 
     public override void Exit()
     {
         controller.Input.PlayerMovement.Jump.performed -= Jump;
-        controller.Input.PlayerMovement.Light.performed += LightAttack;
-        controller.Input.PlayerMovement.Heavy.performed += HeavyAttack;
+        controller.Input.PlayerMovement.Light.performed -= LightAttack;
+        controller.Input.PlayerMovement.Heavy.performed -= HeavyAttack;
         controller.Input.PlayerMovement.Run.started -= StartRun;
         controller.Input.PlayerMovement.Run.canceled -= StopRun;
         controller.IsRunning = false;
@@ -35,23 +33,16 @@ public class PlayerGroundState : PlayerState
 
     private void HeavyAttack(InputAction.CallbackContext context)
     {
-        controller.SetAnimation("HeavyAttack");
-        Debug.DrawRay(controller.transform.position, Vector3.forward * 3, Color.yellow);
-        Collider[] hits = Physics.OverlapSphere(controller.transform.position, 10, controller.playerMask);
-        Debug.Log("hits " + hits.Length);
-        foreach (Collider hit in hits)
-        {
-            if (hit.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
-            {
-                Debug.Log(hit.gameObject.name);
-                damagable.DealDamage(5, controller.Stats.gameObject);
-            }
-        }
+        controller.SetAttackType(true);
+        controller.SetAnimation("HeavyAttack",false);
+        stateMachine.ChangeState(controller.AttackState);
     }
 
     private void LightAttack(InputAction.CallbackContext context)
     {
-        controller.SetAnimation("LightAttack"); 
+        controller.SetAttackType(false);
+        controller.SetAnimation("LightAttack",false);
+        stateMachine.ChangeState(controller.AttackState);
     }
 
     public override void FixedUpdate()
@@ -88,7 +79,7 @@ public class PlayerGroundState : PlayerState
 
     private void Jump(InputAction.CallbackContext context)
     {
-        Debug.Log("Jump");
         controller.rb.AddForce(Vector3.up * controller.jumpForce, ForceMode.Impulse);
+        controller.SetAnimation("Jump", true);
     }
 }

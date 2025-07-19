@@ -1,133 +1,79 @@
-using Mirror;
 using System.Collections.Generic;
-using TMPro;
-using Unity.Cinemachine;
-using Unity.VisualScripting;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using Mirror;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/guides/networkbehaviour
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
 */
 
-public class PlayerStats : NetworkBehaviour, IDamagable
+public class NetworkWeapon : NetworkBehaviour
 {
-    [SerializeField] float baseHp = 100;
-    float maxHp;
-    [SyncVar(hook = nameof(HpChange))]
-    float currentHp;
-
-    [SerializeField] float baseStamina = 60;
-    float maxStamina;
-    float currentStamina;
-
-
-    [SerializeField] float baseDamage = 10;
-    float currentDamage;
-    public float CurrentDamage=> currentDamage;
-
-    [SerializeField] TextMeshPro hpDisplay;
-    [SerializeField] PlayerController controller;
-    [SerializeField] Collider playerCollider;
-    [SerializeField] GameObject playerModel;
-    [SerializeField] CinemachineDeoccluder deoccluder;
-
-    [SyncVar(hook = nameof(ExpectatingChange))]
-    public bool isExpactating;
-
-    public void SetExpectating(bool expectating)
+    Dictionary<int, Weapon> loadedWeapons;
+    [SerializeField] PlayerStats owner;
+    [SerializeField] Transform weaponSocket;
+    public Weapon CurrentWeapon { get; private set; }
+    [SyncVar(hook = nameof(WeaponChanged))]
+    int currentWeaponId = int.MinValue;
+    public void ChangeWeapon(int weaponID)
     {
-        ServerSetExpectating(expectating);
-    }
-    [Server]
-    void ServerSetExpectating(bool expectating)
-    {
-        isExpactating = expectating;
-    }
-
-    void ExpectatingChange(bool oldeExpectating, bool newExpectating)
-    {
-        if (newExpectating) 
-        {
-            controller.Input.PlayerMovement.Disable();
-            controller.Input.SpectatorMovement.Enable();
-        }
-        else
-        {
-            controller.Input.PlayerMovement.Enable();
-            controller.Input.SpectatorMovement.Disable();
-        }
-        controller.rb.useGravity = !newExpectating;
-        controller.Stats.playerCollider.enabled = !newExpectating;
-        controller.Stats.playerModel.SetActive(!newExpectating);
-        controller.Stats.deoccluder.enabled = !newExpectating;
-    }
-
-    [Command]
-    public void IncreaseMaxHp(float amount)
-    {
-        maxHp += amount;
-        currentHp += amount;
-    }
-
-    [Command]
-     void IncreaseMaxStamina(float amount)
-    {
-        maxStamina += amount;
-        currentStamina += amount;
-    }
-
-    [Command]
-     void IncreaseDamage(float amount)
-    {
-        currentDamage += amount; 
-    }
-
-
-    public void DealDamage(float amount, GameObject dealer)
-    {
-        if (dealer == gameObject) { return; }
-        TakeDamage(amount);
+        CmdChangeWeapon(weaponID);
     }
 
     [Command(requiresAuthority = false)]
-    public void TakeDamage(float damage)
+    void CmdChangeWeapon(int weaponID)
     {
-        Debug.Log("Golpeado " + gameObject.name);
-        currentHp -= Mathf.Abs(damage);
-        if (currentHp <= 0)
+
+        currentWeaponId = weaponID;
+    }
+
+    void WeaponChanged(int oldWeapon, int newWeapon)
+    {
+        //Turn off old active weapon
+        if (loadedWeapons.ContainsKey(oldWeapon))
         {
-            RPCEnterSpectator();
+            loadedWeapons[oldWeapon].gameObject.SetActive(false);
         }
-    }
-
-    [ClientRpc]
-    void RPCEnterSpectator()
-    {
-        controller.StateMachine.ChangeState(controller.SpectatorState);
-    }
-
-    void HpChange(float oldHp, float newHP)
-    {
-        hpDisplay.text = currentHp.ToString();
-    }
-
-    public void IncreaseStat(StatType statType, float statGivenAmount)
-    {
-        switch (statType)
+        //Turn on loaded weapon if exists
+        if (loadedWeapons.ContainsKey(newWeapon))
         {
-            case StatType.HP:
-                IncreaseMaxHp(statGivenAmount);
-                break;
-            case StatType.Stamina:
-                IncreaseMaxStamina(statGivenAmount);
-                break;
-            case StatType.Damage:
-                IncreaseDamage(statGivenAmount);
-                break;
+            loadedWeapons[newWeapon].gameObject.SetActive(true);
+            CurrentWeapon = loadedWeapons[newWeapon];
+            return;
         }
+        //Load weapon if not already loaded
+        WeaponData weaponData = WeaponServer.Instance.GetWeapon(newWeapon);
+        if (weaponData == null) { Debug.LogError("Weapon with ID " + newWeapon + " is not valid"); return; }
+        GameObject weaponInstance = Instantiate(weaponData.weapon.gameObject, weaponSocket);
+        Weapon weapon = weaponInstance.GetComponent<Weapon>();
+        weapon.InitializeWeapon(owner);
+        loadedWeapons.Add(weaponData.id, weaponInstance.GetComponent<Weapon>());
+        CurrentWeapon = loadedWeapons[newWeapon];
+        if (isServer) { NetworkServer.Spawn(weaponInstance,gameObject); }
     }
+
+
+
+    [SyncVar(hook = nameof(HitBoxChange))]
+    bool isHitBoxEnable;
+    public List<Collider> hitBox;
+
+
+    public void ChangeHitbox(bool isActive)
+    {
+        CommandChangeHitbox(isActive);
+    }
+
+    [Command(requiresAuthority = false)]
+    void CommandChangeHitbox(bool isActive)
+    {
+        isHitBoxEnable = isActive;
+    }
+    void HitBoxChange(bool oldHitBox, bool newHitBox)
+    {
+        CurrentWeapon.HitBoxChange(newHitBox);
+    }
+   
 
     #region Unity Callbacks
 
@@ -141,11 +87,13 @@ public class PlayerStats : NetworkBehaviour, IDamagable
 
     // NOTE: Do not put objects in DontDestroyOnLoad (DDOL) in Awake.  You can do that in Start instead.
     void Awake()
-    {
+    {  
+
     }
 
     void Start()
     {
+      
     }
 
     #endregion
@@ -157,7 +105,7 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer() {    }
+    public override void OnStartServer() { }
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -169,7 +117,10 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// Called on every NetworkBehaviour when it is activated on a client.
     /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
     /// </summary>
-    public override void OnStartClient() {
+    public override void OnStartClient()
+    {
+        loadedWeapons = new Dictionary<int, Weapon>();
+        ChangeWeapon(2);
     }
 
     /// <summary>
@@ -182,8 +133,9 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// Called when the local player object has been set up.
     /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
     /// </summary>
-    public override void OnStartLocalPlayer() 
+    public override void OnStartLocalPlayer()
     {
+
     }
 
     /// <summary>
@@ -197,26 +149,9 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// <para>This is called after <see cref="OnStartServer">OnStartServer</see> and before <see cref="OnStartClient">OnStartClient.</see></para>
     /// <para>When <see cref="NetworkIdentity.AssignClientAuthority">AssignClientAuthority</see> is called on the server, this will be called on the client that owns the object. When an object is spawned with <see cref="NetworkServer.Spawn">NetworkServer.Spawn</see> with a NetworkConnectionToClient parameter included, this will be called on the client that owns the object.</para>
     /// </summary>
-    public override void OnStartAuthority() 
+    public override void OnStartAuthority()
     {
 
-        CommandSetStats();
-
-
-        currentDamage = baseDamage;
-
-        hpDisplay.gameObject.SetActive(!isLocalPlayer);
-    }
-
-    [Command]
-    private void CommandSetStats()
-    {
-        maxStamina = baseStamina;
-        currentStamina = maxStamina;
-
-
-        maxHp = baseHp;
-        currentHp = baseHp;
     }
 
     /// <summary>
@@ -224,7 +159,6 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// <para>When NetworkIdentity.RemoveClientAuthority is called on the server, this will be called on the client that owns the object.</para>
     /// </summary>
     public override void OnStopAuthority() { }
-
 
     #endregion
 }
