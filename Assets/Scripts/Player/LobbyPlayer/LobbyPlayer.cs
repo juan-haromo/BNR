@@ -1,5 +1,6 @@
-using UnityEngine;
 using Mirror;
+using UnityEngine;
+using UnityEngine.Windows;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/components/network-room-player
@@ -21,7 +22,7 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer() { }
+    public override void OnStartServer() { Debug.Log("Start server"); }
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -33,7 +34,7 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// Called on every NetworkBehaviour when it is activated on a client.
     /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
     /// </summary>
-    public override void OnStartClient() { }
+    public override void OnStartClient() { Debug.Log("Start client"); }
 
     /// <summary>
     /// This is invoked on clients when the server has caused this object to be destroyed.
@@ -71,9 +72,22 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// 
 
     [SerializeField] LobbyPlayerController roomPlayer;
+    [SyncVar(hook = nameof(RoomPlayerActiveChange))]
+    bool isRoomPlayerActive;
+    [SerializeField] Rigidbody rb;
+
+    public void RoomPlayerActiveChange(bool oldActive, bool newActive)
+    {
+        rb.useGravity = newActive;
+        roomPlayer.coll.enabled = newActive;
+        roomPlayer.playerModel.SetActive(newActive);
+    }
+
     public override void OnClientEnterRoom() 
     {
+        Debug.Log("Enter Room");
         roomPlayer.EnableInput();
+        SetPlayerActive(true);
         roomPlayer.gameObject.SetActive(true);
     }
 
@@ -82,8 +96,15 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// </summary>
     public override void OnClientExitRoom() 
     {
-        roomPlayer.gameObject.SetActive(false);
+        Debug.Log("Exit room");
+        SetPlayerActive(false);
         roomPlayer.DisableInput();
+    }
+
+    [Server]
+    void SetPlayerActive(bool active)
+    {
+        isRoomPlayerActive = active;
     }
 
     #endregion

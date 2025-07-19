@@ -17,30 +17,35 @@ using System;
 public class LobbyPlayerController : NetworkBehaviour
 {
     IA_Player input;
-    [SerializeField] Rigidbody rb;
-    [SerializeField] CapsuleCollider coll;
+    public Rigidbody rb;
+    public CapsuleCollider coll;
     [SerializeField] LayerMask groundMask;
     [SerializeField] float jumpForce;
     [SerializeField] float speed;
+    [SerializeField] NetworkAnimator newtworkAnimator;
     [SerializeField] Animator animator;
     [SerializeField] GameObject player;
+    public GameObject playerModel;
     float moveDirection;
+    [SyncVar]
     bool isGrounded = false;
     public void EnableInput()
     {
-        input ??= new IA_Player();
-        input.RoomMovement.Jump.performed += Jump;
-        input.RoomMovement.Enable();
+        if(input == null){ input = new IA_Player(); }
         rb.useGravity = true;
         coll.enabled = true;
+        playerModel.SetActive(true);
+        input.RoomMovement.Jump.performed += Jump;
+        input.RoomMovement.Enable();
     }
 
     public void DisableInput()
     {
-        input.RoomMovement.Disable();
-        input.RoomMovement.Jump.performed -= Jump;
         rb.useGravity = false;
         coll.enabled = false;
+        playerModel.SetActive(false);
+        input.RoomMovement.Disable();
+        input.RoomMovement.Jump.performed -= Jump;
     }
 
     private void Jump(InputAction.CallbackContext context)
@@ -48,6 +53,7 @@ public class LobbyPlayerController : NetworkBehaviour
         if(!isLocalPlayer) {return;}
         if (isGrounded)
         {
+            Jump();
             animator.SetTrigger("Jump");
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
@@ -58,10 +64,26 @@ public class LobbyPlayerController : NetworkBehaviour
         if(!isLocalPlayer) {return;}
         Debug.DrawRay(player.transform.position, Vector3.down * ((coll.height * 0.5f) + 0.1f), Color.magenta);
         isGrounded = Physics.Raycast(player.transform.position, Vector3.down, (coll.height * 0.5f) + 0.1f, groundMask);
-        animator.SetBool("IsGrounded", isGrounded);
         moveDirection = input.RoomMovement.Run.ReadValue<float>();
-        animator.SetFloat("Speed", moveDirection);
         rb.linearVelocity = new Vector3(moveDirection * speed, rb.linearVelocity.y, 0);
+        SetAnimations(isGrounded, moveDirection);
     }
+
+    [Command]
+    void SetAnimations(bool _isGrounded, float _moveDirection)
+    {
+        newtworkAnimator.animator.SetBool("IsGrounded", _isGrounded);
+        newtworkAnimator.animator.SetFloat("Speed", _moveDirection);
+    }
+
+
+    [Command]
+    void Jump()
+    {
+        newtworkAnimator.SetTrigger("Jump");
+    }
+
+
+
 }
 

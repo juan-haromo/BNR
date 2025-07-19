@@ -22,6 +22,7 @@ public class RangedEnemyController : EnemyController
 
     public float shootCooldown;
 
+
     void Start()
     {
         StateMachine = new EnemyStateMachine(this);
