@@ -128,7 +128,7 @@ public class PlayerController : NetworkBehaviour
     #region Movement
     public void UpdateMoveInput()
     {
-        
+        IsRunning = Input.PlayerMovement.Run.IsPressed();
         viewDir = player.position - new Vector3(transform.position.x, player.position.y, transform.position.z);
         orientation.forward = viewDir.normalized;
 

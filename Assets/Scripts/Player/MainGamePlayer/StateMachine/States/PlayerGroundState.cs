@@ -15,8 +15,6 @@ public class PlayerGroundState : PlayerState
         controller.Input.PlayerMovement.Jump.performed += Jump;
         controller.Input.PlayerMovement.Light.performed += LightAttack;
         controller.Input.PlayerMovement.Heavy.performed += HeavyAttack;
-        controller.Input.PlayerMovement.Run.started += StartRun;
-        controller.Input.PlayerMovement.Run.canceled += StopRun;
 
         controller.SetAnimation("GroundBlend",true);
     }
@@ -26,8 +24,7 @@ public class PlayerGroundState : PlayerState
         controller.Input.PlayerMovement.Jump.performed -= Jump;
         controller.Input.PlayerMovement.Light.performed -= LightAttack;
         controller.Input.PlayerMovement.Heavy.performed -= HeavyAttack;
-        controller.Input.PlayerMovement.Run.started -= StartRun;
-        controller.Input.PlayerMovement.Run.canceled -= StopRun;
+
         controller.IsRunning = false;
     }
 
@@ -64,17 +61,6 @@ public class PlayerGroundState : PlayerState
         {
             stateMachine.ChangeState(controller.AirState);
         }
-    }
-
-
-    private void StopRun(InputAction.CallbackContext context)
-    {
-       controller.IsRunning = false;
-    }
-
-    private void StartRun(InputAction.CallbackContext context)
-    {
-        controller.IsRunning = true;
     }
 
     private void Jump(InputAction.CallbackContext context)
