@@ -14,7 +14,6 @@ public class WanderState : EnemyState
 
     public override void Enter()
     {
-        Debug.Log("wandering");
         controller.IsMoving(true);
     }
 
@@ -42,16 +41,18 @@ public class WanderState : EnemyState
             if (nextMove < Time.time)
             {
                 nextMove = Time.time + moveDelay;
-                Vector3 randomDirection = Random.insideUnitSphere * 10;
-                if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, controller.detectionRange, NavMesh.AllAreas))
+                bool postitionFound = false;
+                while (!postitionFound)
                 {
-                    controller.SetDestination(hit.position);
+                    Vector3 randomDirection = (Random.insideUnitSphere * controller.Stats.SpawnRadius) + controller.Stats.StartPosition;
+                    if (NavMesh.SamplePosition(randomDirection, out NavMeshHit hit, controller.detectionRange, NavMesh.AllAreas))
+                    {
+                        controller.SetDestination(hit.position);
+                        postitionFound = true;
+                    }
                 }
+               
             }
         }
-
-        
-
-        
     }
 }

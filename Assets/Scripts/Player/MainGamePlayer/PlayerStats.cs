@@ -92,9 +92,8 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     }
 
     [Command(requiresAuthority = false)]
-    public void TakeDamage(float damage)
+    void TakeDamage(float damage)
     {
-        Debug.Log("Golpeado " + gameObject.name);
         currentHp -= Mathf.Abs(damage);
         if (currentHp <= 0)
         {

@@ -11,6 +11,8 @@ public class RangedEnemyController : EnemyController
 
     public BasicProjectile projectile;
     public Transform projectileStart;
+    [SerializeField] EnemyStats owner;
+    public EnemyStats Stats => owner;
 
     [SyncVar(hook = nameof(DestinationChanged))]
     Vector3 destination;
@@ -126,7 +128,7 @@ public class RangedEnemyController : EnemyController
     void ServerShoot(Vector3 direction)
     {
         GameObject bulletInstance = Instantiate(projectile.gameObject, projectileStart.position, projectile.transform.rotation);
-        bulletInstance.GetComponent<BasicProjectile>().Initialize(gameObject, direction - projectileStart.position);
+        bulletInstance.GetComponent<BasicProjectile>().Initialize(owner.gameObject, direction - projectileStart.position);
         NetworkServer.Spawn(bulletInstance);
     }
 
@@ -152,6 +154,7 @@ public class RangedEnemyController : EnemyController
     {
         return Vector3.Distance(transform.position, target.position);
     }
+
 
     #endregion
 }

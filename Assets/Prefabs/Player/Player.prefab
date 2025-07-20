@@ -581,7 +581,7 @@ MonoBehaviour:
   syncDirection: 0
   syncMode: 0
   syncInterval: 0
-  baseHp: 50
+  baseHp: 100
   baseStamina: 60
   baseDamage: 10
   hpDisplay: {fileID: 5987958734485018346}

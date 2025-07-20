@@ -1,33 +1,17 @@
-using System.Collections.Generic;
-using UnityEngine;
 using Mirror;
 using System;
-using System.Collections;
-using Telepathy;
-using Unity.Mathematics;
+using System.Collections.Generic;
+using UnityEngine;
+using static UnityEngine.UI.GridLayoutGroup;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/guides/networkbehaviour
 	API Reference: https://mirror-networking.com/docs/api/Mirror.NetworkBehaviour.html
 */
 
-public class Spawner : NetworkBehaviour, IEnemyPool
+public class EnemyStats : NetworkBehaviour, IDamagable, IPoolableEnemy
 {
-    public List<PoolableEnemy> enemies;
-    List<IPoolableEnemy> poolableEnemies;
-    public float spawnRadius = 1;
-    public float spawnDelay = 2;
-    [SerializeField] int maxSpawnEnemies = 3;
-    [SyncVar]
-    int spawnCount = 0;
-    [SerializeField] Transform purgatrorio;
     #region Unity Callbacks
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, spawnRadius);
-    }
 
     /// <summary>
     /// Add your validation code here after the base.OnValidate(); call.
@@ -36,6 +20,8 @@ public class Spawner : NetworkBehaviour, IEnemyPool
     {
         base.OnValidate();
     }
+
+
 
     // NOTE: Do not put objects in DontDestroyOnLoad (DDOL) in Awake.  You can do that in Start instead.
     void Awake()
@@ -55,11 +41,7 @@ public class Spawner : NetworkBehaviour, IEnemyPool
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer()
-    {
-        InstantiateEnemies();
-    }
-
+    public override void OnStartServer() { }
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -105,73 +87,117 @@ public class Spawner : NetworkBehaviour, IEnemyPool
     public override void OnStopAuthority() { }
     #endregion
 
-    #region EnemySpawn
-    private void InstantiateEnemies()
+    #region Health
+    [SerializeField] float maxHp;
+    [SyncVar]
+    float currentHP;
+    [SyncVar(hook = nameof(AliveChange))]
+    bool isAlive = true;
+    public bool IsAlive => isAlive;
+    [SerializeField] List<MeshRenderer> enemyMesh;
+    [SerializeField] GameObject brain;
+    [SerializeField] Collider enemyCollider;
+    [SerializeField] StatType statType;
+    [SerializeField] float statGivenAmount;
+    [SerializeField] Vector3 purgatorio;
+
+    public void DealDamage(float amount, GameObject dealer)
     {
-        if (!isServer) { return; }
-        poolableEnemies = new List<IPoolableEnemy>();
-        foreach (PoolableEnemy enemy in enemies)
+        Debug.Log(gameObject.name + " was damaged by " + dealer.name);
+        if (dealer == gameObject) { return; }
+        CmdTakeDamage(amount, dealer);
+    }
+
+    [Server]
+    void CmdTakeDamage(float amount, GameObject dealer)
+    {
+        currentHP -= Mathf.Abs(amount);
+        if (currentHP <= 0)
         {
-            if (enemy.poolableEnemy.TryGetComponent<IPoolableEnemy>(out IPoolableEnemy poolableEnemy))
-            {
-                GameObject enemyInstance = enemy.poolableEnemy;
-                for (int i = 0; i < enemy.amount; i++)
-                {
-                    ServerInstantiateEnemy(enemyInstance);
-                }
-            }
-        }
-        StartCoroutine(SpawnDelay());
-    }
-
-    [Server]
-    void ServerInstantiateEnemy(GameObject enemy)
-    {
-        GameObject instance = Instantiate(enemy, transform.position, enemy.transform.rotation);
-        IPoolableEnemy poolableEnemy = instance.GetComponent<IPoolableEnemy>();
-        poolableEnemies.Add(poolableEnemy);
-        poolableEnemy.Initialize(this, transform.position,spawnRadius, purgatrorio.position);
-        NetworkServer.Spawn(instance);
-        poolableEnemy.EnterPool();
-    }
-
-    [Server]
-    void SpawnEnemy()
-    {
-        if (!isServer || poolableEnemies.Count <= 0) { return; }
-        int i = UnityEngine.Random.Range(0, poolableEnemies.Count);
-        RemoveFromPool(poolableEnemies[i]);
-    }
-
-    [Server]
-    public void AddToPool(IPoolableEnemy poolableEnemy)
-    {
-        poolableEnemies.Add(poolableEnemy);
-        poolableEnemy.EnterPool();
-        spawnCount--;
-    }
-
-    [Server]
-    public void RemoveFromPool(IPoolableEnemy poolableEnemy)
-    {
-        if (poolableEnemies.Remove(poolableEnemy))
-        {
-            poolableEnemy.ExitPool();
-            spawnCount++;
+            Die(dealer);
         }
     }
 
-    IEnumerator SpawnDelay()
+    [Server]
+    void Die(GameObject dealer) 
     {
-        while (true)
+        if (dealer.TryGetComponent<PlayerStats>(out PlayerStats stats))
         {
-            if ((spawnCount < maxSpawnEnemies) && poolableEnemies.Count > 0)
-            {
-                SpawnEnemy();
-            }
-            yield return new WaitForSeconds(spawnDelay);
+            stats.IncreaseStat(statType, statGivenAmount);
+        }
+        pool.AddToPool(this);
+    }
+
+
+    void AliveChange(bool _oldAlive, bool _newAlive)
+    {
+        foreach (MeshRenderer mesh in enemyMesh)
+        {
+            mesh.enabled = _newAlive;
+        }
+        brain.SetActive(_newAlive);
+        enemyCollider.enabled = _newAlive;
+        transform.position = _newAlive ? RandomSpawnPos() : purgatorio;
+        if (!_newAlive)
+        {
+            EnterPool();
         }
     }
+
+
     #endregion
 
+    #region EnemyPool
+    IEnemyPool pool;
+    [SyncVar]
+    Vector3 startPosition;
+    public Vector3 StartPosition => startPosition;
+    [SyncVar]
+    float spawnRadius;
+    public float SpawnRadius => spawnRadius;
+    public void Initialize(IEnemyPool pool, Vector3 startPosition, float spawnRadius, Vector3 purgatorio)
+    {
+        this.pool = pool;
+        this.startPosition = startPosition;
+        this.spawnRadius = spawnRadius;
+    }
+
+    public void ExitPool()
+    {
+        CmdExitPool();
+    }
+
+    [Server]
+    void CmdExitPool()
+    {
+        currentHP = maxHp;
+        isAlive = true;
+    }
+
+    Vector3 RandomSpawnPos()
+    {
+        Vector2 offset = (UnityEngine.Random.insideUnitCircle * spawnRadius);
+        return new Vector3(startPosition.x + offset.x, startPosition.y, startPosition.z + offset.y);
+    }
+
+    public void EnterPool()
+    {
+        CmdEnterPool();
+    }
+
+    [Server]
+    void CmdEnterPool()
+    {
+        isAlive = false;
+    }
+    
+    #endregion
+}
+
+[Serializable]
+public enum StatType
+{
+    HP,
+    Stamina,
+    Damage
 }

@@ -3,7 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 
-public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
+public class DummyEnemy : NetworkBehaviour, IDamagable
 {
     [SerializeField] float maxHp;
     [SyncVar]
@@ -46,7 +46,6 @@ public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
         {
             stats.IncreaseStat(statType, statGivenAmount);
         }
-        pool.AddToPool(this);
     }
 
     void AliveChange(bool _oldAlive, bool _newAlive)
@@ -61,7 +60,7 @@ public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
         }
     }
 
-    public void Initialize(IEnemyPool pool)
+    public void Initialize(IEnemyPool pool, Vector3 startPosition, float spawnRadius)
     {
        this.pool = pool;
     }
@@ -76,10 +75,3 @@ public class DummyEnemy : NetworkBehaviour, IDamagable, IPoolableEnemy
     }
 }
 
-[Serializable]
-public enum StatType
-{
-    HP,
-    Stamina,
-    Damage
-}

@@ -1,9 +1,9 @@
-using UnityEngine;
+using UnityEngine; 
 
 public class AttackState : EnemyState
 {
     RangedEnemyController controller;
-    float attackDelay = .5f;
+    float attackDelay = 2.5f;
     float attackReadyTime;
     float exitStateTime;
     bool canShoot;
@@ -32,6 +32,8 @@ public class AttackState : EnemyState
 
     public override void Update()
     {
+        if (!controller.Stats.IsAlive)
+        {attackReadyTime = Time.time + attackDelay;  return; }
         controller.SetLookDirection(controller.target.position);
         if (Time.time > attackReadyTime && canShoot) 
         {

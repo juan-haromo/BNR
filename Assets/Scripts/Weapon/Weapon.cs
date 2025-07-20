@@ -22,12 +22,9 @@ public class Weapon : NetworkBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collided");
         if(other.gameObject == owner.gameObject || hitBox.Contains(other)) {return;}
-        Debug.Log("Trying to damage");
         if(other.gameObject.TryGetComponent<IDamagable>(out IDamagable damagable))
         {
-            Debug.Log("Damage");
             damagable.DealDamage(baseDamage + owner.CurrentDamage, owner.gameObject);
         }
         HitBoxChange(false);

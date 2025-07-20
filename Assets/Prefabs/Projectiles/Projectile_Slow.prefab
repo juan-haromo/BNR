@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7427024947473315699}
   - component: {fileID: -3027234153396449773}
   m_Layer: 0
-  m_Name: Projectile
+  m_Name: Projectile_Slow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -11.618016, y: -0.74154735, z: -9.701707}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -124,7 +124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneId: 0
-  _assetId: 3632087104
+  _assetId: 1887456604
   serverOnly: 0
   visibility: 0
   hasSpawned: 0
@@ -178,5 +178,5 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0
   lifeTime: 2
-  speed: 20
-  damage: 5
+  speed: 5
+  damage: 10
