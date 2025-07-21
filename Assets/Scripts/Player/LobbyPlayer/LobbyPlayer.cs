@@ -15,6 +15,16 @@ using UnityEngine.Windows;
 /// </summary>
 public class LobbyPlayer : NetworkRoomPlayer
 {
+    [SyncVar(hook = nameof(NameChanged))]
+    string playerName;
+
+    string[] names = { "BalatroKing", "JokerClutch", "AceOfMeta", "HighStakeHero", "XxWildDrawxX", "DeckDevil", "CritFlush", "ChipStacked", "BluffGod", "MetaJokerX", "MultiverseMain","NexusSniper","QuantumStrike","OmegaVariant","ShieldBreaker","DarkVibranium","XxSpiderClutchxX","DrDoomedYou","KhaosSurfer","MysticCrits" };
+
+    void NameChanged(string oldName, string newName)
+    {
+        gameObject.name = newName;
+    }
+
     #region Start & Stop Callbacks
 
     /// <summary>
@@ -46,7 +56,28 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// Called when the local player object has been set up.
     /// <para>This happens after OnStartClient(), as it is triggered by an ownership message from the server. This is an appropriate place to activate components or functionality that should only be active for the local player, such as cameras and input.</para>
     /// </summary>
-    public override void OnStartLocalPlayer() { }
+    public override void OnStartLocalPlayer() 
+    {
+        PlayeName playerName = FindAnyObjectByType<PlayeName>();
+        this.playerName = playerName.playerName != string.Empty? playerName.playerName : GenerateName();
+        gameObject.name = this.playerName;
+        CmdSetName(this.playerName);
+        playerName.gameObject.SetActive(false);
+    }
+
+    [Command]
+    void CmdSetName(string newName)
+    {
+        this.playerName = newName;
+    }
+
+    string GenerateName()
+    {
+        int i = Random.Range(0, names.Length);
+
+        return names[i] + Random.Range(0, 9999);
+        
+    }
 
     /// <summary>
     /// This is invoked on behaviours that have authority, based on context and <see cref="NetworkIdentity.hasAuthority">NetworkIdentity.hasAuthority</see>.

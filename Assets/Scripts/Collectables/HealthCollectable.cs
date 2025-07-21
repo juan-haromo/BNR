@@ -7,6 +7,7 @@ public class HealthCollectable : ACollectable
     public override void OnCollect(Collider other)
     {
         if(other.gameObject.TryGetComponent<PlayerStats>(out PlayerStats stats)){
+            if (stats.isExpactating) { return; }
             stats.Heal(amount);
             NetworkServer.UnSpawn(gameObject);
         }

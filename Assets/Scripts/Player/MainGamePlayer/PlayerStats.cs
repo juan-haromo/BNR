@@ -5,6 +5,7 @@ using Unity.Cinemachine;
 using Unity.VisualScripting;
 using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
+using UnityEngine.UI;
 
 /*
 	Documentation: https://mirror-networking.gitbook.io/docs/guides/networkbehaviour
@@ -14,6 +15,7 @@ using UnityEngine;
 public class PlayerStats : NetworkBehaviour, IDamagable
 {
     [SerializeField] float baseHp = 100;
+    [SyncVar]
     float maxHp;
     [SyncVar(hook = nameof(HpChange))]
     float currentHp;
@@ -27,9 +29,11 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     float currentDamage;
     public float CurrentDamage=> currentDamage;
 
-    [SerializeField] TextMeshPro hpDisplay;
+    [SerializeField] Image hpBarServer;
+    [SerializeField] Image hpBarLocal;
     [SerializeField] PlayerController controller;
     [SerializeField] Collider playerCollider;
+    [SerializeField] Collider playerSpectatorCollider;
     [SerializeField] GameObject playerModel;
     [SerializeField] CinemachineDeoccluder deoccluder;
 
@@ -40,7 +44,8 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     {
         ServerSetExpectating(expectating);
     }
-    [Server]
+
+    [Command(requiresAuthority = false)]
     void ServerSetExpectating(bool expectating)
     {
         isExpactating = expectating;
@@ -61,12 +66,23 @@ public class PlayerStats : NetworkBehaviour, IDamagable
         controller.rb.useGravity = !newExpectating;
         controller.Stats.playerCollider.enabled = !newExpectating;
         controller.Stats.playerModel.SetActive(!newExpectating);
+        playerCollider.enabled = newExpectating;
         controller.Stats.deoccluder.enabled = !newExpectating;
+        if (!isLocalPlayer) { return; }
+        if (newExpectating)
+        {
+            GameManager.Instance.RemovePlayer();
+        }
+        else
+        {
+            GameManager.Instance.AddPlayer();
+        }
     }
 
     public void Heal(float amount)
     {
         CmdHeal(amount);
+        if (isLocalPlayer) { hpBarLocal. fillAmount = currentHp / maxHp; }
     }
 
     [Command(requiresAuthority = false)]
@@ -75,22 +91,28 @@ public class PlayerStats : NetworkBehaviour, IDamagable
         currentHp = Mathf.Min(currentHp + Mathf.Abs(amount), maxHp);
     }
 
-    [Command]
     public void IncreaseMaxHp(float amount)
+    {
+        maxHp += amount;
+        CmdIncreaseMaxHp(amount);
+    }
+
+    [Server]
+    void CmdIncreaseMaxHp(float amount)
     {
         maxHp += amount;
         currentHp += amount;
     }
 
     [Command]
-     void IncreaseMaxStamina(float amount)
+    void IncreaseMaxStamina(float amount)
     {
         maxStamina += amount;
         currentStamina += amount;
     }
 
     [Command]
-     void IncreaseDamage(float amount)
+    void IncreaseDamage(float amount)
     {
         currentDamage += amount; 
     }
@@ -99,13 +121,20 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     public void DealDamage(float amount, GameObject dealer)
     {
         if (dealer == gameObject) { return; }
-        TakeDamage(amount);
+        CmdTakeDamage(amount);
+        if (isLocalPlayer) { hpBarLocal.fillAmount = (currentHp) / maxHp; }
     }
 
+
+
+
     [Command(requiresAuthority = false)]
-    void TakeDamage(float damage)
+    void CmdTakeDamage(float damage)
     {
+        if (!isServer) { return; }
         currentHp -= Mathf.Abs(damage);
+        
+        
         if (currentHp <= 0)
         {
             RPCEnterSpectator();
@@ -120,7 +149,11 @@ public class PlayerStats : NetworkBehaviour, IDamagable
 
     void HpChange(float oldHp, float newHP)
     {
-        hpDisplay.text = currentHp.ToString();
+        if (isLocalPlayer)
+        {
+            hpBarLocal.fillAmount = newHP / maxHp; 
+        }
+        hpBarServer.fillAmount = newHP / maxHp;
     }
 
     public void IncreaseStat(StatType statType, float statGivenAmount)
@@ -152,10 +185,12 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     // NOTE: Do not put objects in DontDestroyOnLoad (DDOL) in Awake.  You can do that in Start instead.
     void Awake()
     {
+
     }
 
     void Start()
     {
+
     }
 
     #endregion
@@ -194,6 +229,8 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// </summary>
     public override void OnStartLocalPlayer() 
     {
+         
+        GameManager.Instance.AddPlayer();
     }
 
     /// <summary>
@@ -209,13 +246,11 @@ public class PlayerStats : NetworkBehaviour, IDamagable
     /// </summary>
     public override void OnStartAuthority() 
     {
-
         CommandSetStats();
-
-
         currentDamage = baseDamage;
-
-        hpDisplay.gameObject.SetActive(!isLocalPlayer);
+        hpBarServer.gameObject.SetActive(!isLocalPlayer);
+        if (!isLocalPlayer) { return; }
+        hpBarLocal.gameObject.SetActive(true);
     }
 
     [Command]
