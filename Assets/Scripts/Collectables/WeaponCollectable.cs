@@ -1,3 +1,4 @@
+using Mirror;
 using UnityEngine;
 
 public class WeaponCollectable : ACollectable
@@ -9,7 +10,7 @@ public class WeaponCollectable : ACollectable
         if(other.gameObject.TryGetComponent<NetworkWeapon>(out NetworkWeapon holder))
         {
             holder.ChangeWeapon(weaponData.id);
-            ChangeActive(false);
+            NetworkServer.UnSpawn(gameObject);
         }
     }
 }

@@ -209,7 +209,6 @@ public class PlayerController : NetworkBehaviour
     public float GetAttackDuration()
     {
         string animationName = heavyAttack ? "HeavyAttack" : "LightAttack";
-        Debug.Log("Attack type " +  animationName);
         RuntimeAnimatorController runtimeAnimator = animator.runtimeAnimatorController;
         foreach(AnimationClip clip in runtimeAnimator.animationClips)
         {

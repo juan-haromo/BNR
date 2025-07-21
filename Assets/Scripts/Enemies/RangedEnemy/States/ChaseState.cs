@@ -12,7 +12,6 @@ public class ChaseState : EnemyState
 
     public override void Enter()
     {
-        Debug.Log("Chasing");
         controller.SetDestination(controller.target.position);
         controller.IsMoving(true);
     }

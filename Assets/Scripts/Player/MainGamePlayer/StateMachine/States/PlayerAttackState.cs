@@ -11,14 +11,11 @@ public class PlayerAttackState : PlayerState
     {
 
         exitTime = Time.time + controller.GetAttackDuration();
-        Debug.Log(controller.Animator.GetCurrentAnimatorStateInfo(0).shortNameHash);
-        Debug.Log("Enter attack Current time:" + Time.time + " exit time" + exitTime);
         controller.weapon.ChangeHitbox(true);
     }
 
     public override void Exit()
     {
-        Debug.Log("Exit attack");
         controller.weapon.ChangeHitbox(false);
         controller.SetCanChangeAnimation(true);
         controller.SetAnimation("GroundBlend",true);

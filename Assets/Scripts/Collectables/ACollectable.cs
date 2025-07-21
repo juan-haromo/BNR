@@ -9,19 +9,47 @@ using Mirror;
 
 public  abstract class ACollectable : NetworkBehaviour
 {
+    [SyncVar]
+    [SerializeField] protected CollectiblesSpawner spawner;
+    [SerializeField] GameObject collectible;
+    [SerializeField] Collider coll;
     [SyncVar(hook = nameof(ActiveChange))]
     bool isActive;
+   
+    void Awake()
+    {
+        Initialize();
+    }
 
     void ActiveChange(bool oldActive, bool newActive)
     {
-        gameObject.SetActive(newActive);
+        Debug.Log("Active change hook");
+        coll.enabled = newActive;
+        collectible.SetActive(newActive);
     }
 
-    protected void ChangeActive(bool isActive)
+    public void ChangeActive(bool isActive)
     {
-        gameObject.SetActive(isActive);
+        Debug.Log("Active change local");
+        //coll.enabled = isActive;
+        //collectible.SetActive(isActive);
+        ServerChangeActive(isActive);
+    }
+
+    [Command(requiresAuthority = false)]
+    public void ServerChangeActive(bool isActive)
+    {
         this.isActive = isActive;
     }
+
+
+    public void Initialize()
+    {
+        spawner = gameObject.GetComponentInParent<CollectiblesSpawner>();
+        ChangeActive(false);
+    }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -41,9 +69,7 @@ public  abstract class ACollectable : NetworkBehaviour
     }
 
     // NOTE: Do not put objects in DontDestroyOnLoad (DDOL) in Awake.  You can do that in Start instead.
-    void Awake()
-    {
-    }
+
 
     void Start()
     {

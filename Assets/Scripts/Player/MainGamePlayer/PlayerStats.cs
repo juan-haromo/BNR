@@ -64,6 +64,17 @@ public class PlayerStats : NetworkBehaviour, IDamagable
         controller.Stats.deoccluder.enabled = !newExpectating;
     }
 
+    public void Heal(float amount)
+    {
+        CmdHeal(amount);
+    }
+
+    [Command(requiresAuthority = false)]
+    void CmdHeal(float amount)
+    {
+        currentHp = Mathf.Min(currentHp + Mathf.Abs(amount), maxHp);
+    }
+
     [Command]
     public void IncreaseMaxHp(float amount)
     {

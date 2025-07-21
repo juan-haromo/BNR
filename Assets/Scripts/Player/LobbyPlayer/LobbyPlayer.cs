@@ -22,7 +22,7 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// <para>This could be triggered by NetworkServer.Listen() for objects in the scene, or by NetworkServer.Spawn() for objects that are dynamically created.</para>
     /// <para>This will be called for objects on a "host" as well as for object on a dedicated server.</para>
     /// </summary>
-    public override void OnStartServer() { Debug.Log("Start server"); }
+    public override void OnStartServer() {  }
 
     /// <summary>
     /// Invoked on the server when the object is unspawned
@@ -34,7 +34,7 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// Called on every NetworkBehaviour when it is activated on a client.
     /// <para>Objects on the host have this function called, as there is a local client on the host. The values of SyncVars on object are guaranteed to be initialized correctly with the latest state from the server when this function is called on the client.</para>
     /// </summary>
-    public override void OnStartClient() { Debug.Log("Start client"); }
+    public override void OnStartClient() {  }
 
     /// <summary>
     /// This is invoked on clients when the server has caused this object to be destroyed.
@@ -85,7 +85,6 @@ public class LobbyPlayer : NetworkRoomPlayer
 
     public override void OnClientEnterRoom() 
     {
-        Debug.Log("Enter Room");
         roomPlayer.EnableInput();
         SetPlayerActive(true);
         roomPlayer.gameObject.SetActive(true);
@@ -96,7 +95,6 @@ public class LobbyPlayer : NetworkRoomPlayer
     /// </summary>
     public override void OnClientExitRoom() 
     {
-        Debug.Log("Exit room");
         SetPlayerActive(false);
         roomPlayer.DisableInput();
     }
