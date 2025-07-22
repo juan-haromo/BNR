@@ -18,6 +18,21 @@ The game relies on four main mechanics:
 4. **Weapons & Combat**
 
 
+## How to play
+
+1. Go to [Dowloads](Downloads) and find your game version (Currently only windows)
+2. Dowload the game and run it
+3. Run another instance of the game under the same network
+4. Join or Host a game
+5. You need 2-4 player and then you can start playing
+
+## Controls 
+
+* Move your character with WASD
+* Control de camera with mouse movevement
+* Jump using space
+* Use qe to go up down on spectator mode
+
 ## The Challenge
 
 The biggest challenge was getting all mechanics to work together **while staying synchronized across all clients and the server**.
